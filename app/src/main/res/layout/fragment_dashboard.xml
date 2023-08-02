@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.createGame.CreateGameFragment"
+        android:backgroundTint="@color/red_card">
+
+    <Button
+            android:text="Timeout Team two"
+            android:layout_width="130dp"
+            android:layout_height="100dp"
+            android:id="@+id/timeOutTwoBtn"
+            android:backgroundTint="@color/purple_500"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="48dp"
+            app:layout_constraintTop_toTopOf="@+id/timeOutOneBtn" />
+
+    <Button
+            android:text="Timeout Team One"
+            android:layout_width="130dp"
+            android:layout_height="100dp"
+            android:id="@+id/timeOutOneBtn"
+            android:backgroundTint="@color/purple_500"
+            android:layout_marginTop="4dp"
+            app:layout_constraintTop_toBottomOf="@+id/redOneBtn"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="48dp" />
+
+    <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="130dp"
+            android:layout_height="15dp"
+            android:id="@+id/cardsTeamOne"
+            app:layout_constraintTop_toBottomOf="@+id/teamNameOne"
+            app:layout_constraintStart_toStartOf="@+id/teamNameOne"
+            android:max="3"
+            android:progressTint="#FF9800" />
+
+    <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="130dp"
+            android:layout_height="15dp"
+            android:id="@+id/cardsTeamTwo"
+            app:layout_constraintStart_toStartOf="@+id/teamNameTwo"
+            app:layout_constraintTop_toBottomOf="@+id/teamNameTwo"
+            android:max="3"
+            android:progressTint="#FF9800" />
+
+    <Button
+            android:text="Red Card Team one"
+            android:layout_width="130dp"
+            android:layout_height="100dp"
+            android:id="@+id/redOneBtn"
+            app:layout_constraintTop_toBottomOf="@+id/yellowOneBtn"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="4dp"
+            android:layout_marginStart="48dp"
+            android:backgroundTint="@color/red_card" />
+
+    <Button
+            android:text="Red Card Team two"
+            android:layout_width="130dp"
+            android:layout_height="100dp"
+            android:id="@+id/redTwoBtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="48dp"
+            android:backgroundTint="@color/red_card"
+            app:layout_constraintTop_toTopOf="@+id/redOneBtn" />
+
+    <Button
+            android:text="Yellow Card Team two"
+            android:layout_width="130dp"
+            android:layout_height="100dp"
+            android:id="@+id/yellowTwoBtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="48dp"
+            android:backgroundTint="@color/yellow_card"
+            app:layout_constraintTop_toTopOf="@+id/yellowOneBtn" />
+
+    <Button
+            android:text="Yellow Card Team one"
+            android:layout_width="130dp"
+            android:layout_height="100dp"
+            android:id="@+id/yellowOneBtn"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="48dp"
+            app:layout_constraintTop_toBottomOf="@+id/greenOneBtn"
+            android:layout_marginTop="4dp"
+            android:backgroundTint="@color/yellow_card" />
+
+    <Button
+            android:text="Green Card Team two"
+            android:layout_width="130dp"
+            android:layout_height="100dp"
+            android:id="@+id/greenTwoBtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="48dp"
+            android:backgroundTint="@color/green_card"
+            app:layout_constraintTop_toTopOf="@+id/greenOneBtn" />
+
+    <Button
+            android:text="Green Card Team one"
+            android:layout_width="130dp"
+            android:layout_height="100dp"
+            android:id="@+id/greenOneBtn"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="48dp"
+            app:layout_constraintTop_toBottomOf="@+id/scoreOneBtn"
+            android:layout_marginTop="4dp"
+            android:backgroundTint="@color/green_card" />
+
+    <Button
+            android:text="Score Team one"
+            android:layout_width="130dp"
+            android:layout_height="100dp"
+            android:id="@+id/scoreOneBtn"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="48dp"
+            app:layout_constraintTop_toBottomOf="@+id/scoreTeamOne"
+            android:layout_marginTop="8dp" />
+
+    <Button
+            android:text="Score Team two"
+            android:layout_width="130dp"
+            android:layout_height="100dp"
+            android:id="@+id/scoreTwoBtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="48dp"
+            app:layout_constraintTop_toTopOf="@+id/scoreOneBtn" />
+
+    <TextView
+            android:text="Team One"
+            android:layout_width="130dp"
+            android:layout_height="0dp"
+            android:id="@+id/teamNameOne"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="28dp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="48dp"
+            android:textAlignment="center" />
+
+    <TextView
+            android:text="Team Two"
+            android:layout_width="130dp"
+            android:layout_height="0dp"
+            android:id="@+id/teamNameTwo"
+            app:layout_constraintTop_toTopOf="@+id/teamNameOne"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="44dp"
+            android:textAlignment="center" />
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="63dp"
+            android:layout_height="50dp"
+            android:id="@+id/scoreTeamOne"
+            android:textSize="34sp"
+            tools:text="99"
+            android:textAlignment="center"
+            app:layout_constraintTop_toBottomOf="@+id/teamNameOne"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="@+id/teamNameOne"
+            app:layout_constraintEnd_toEndOf="@+id/teamNameOne" />
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="63dp"
+            android:layout_height="50dp"
+            android:id="@+id/scoreTeamTwo"
+            android:textSize="34sp"
+            tools:text="99"
+            android:textAlignment="center"
+            app:layout_constraintTop_toBottomOf="@+id/teamNameTwo"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toEndOf="@+id/teamNameTwo"
+            app:layout_constraintStart_toStartOf="@+id/teamNameTwo" />
+
+    <TextView
+            android:text="99"
+            android:layout_width="92dp"
+            android:layout_height="20dp"
+            android:id="@+id/totalRounds"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardsTeamOne"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="@+id/scoreTeamOne" />
+
+    <TextView
+            android:text="Server"
+            android:layout_width="129dp"
+            android:layout_height="18dp"
+            android:id="@+id/serverOne"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textAlignment="center"
+            android:textColor="#AEAEAE"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toTopOf="@+id/teamNameOne"
+            app:layout_constraintStart_toStartOf="@+id/teamNameOne" />
+
+    <TextView
+            android:text="Server"
+            android:layout_width="129dp"
+            android:layout_height="18dp"
+            android:id="@+id/serverTwo"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textAlignment="center"
+            android:textColor="#AEAEAE"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toTopOf="@+id/teamNameTwo"
+            app:layout_constraintStart_toStartOf="@+id/teamNameTwo" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.home.HomeFragment">
+
+    <TextView
+            android:text="99"
+            android:layout_width="47dp"
+            android:layout_height="35dp"
+            android:id="@+id/totalRoundsScoreboard"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardsTeamOne"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="@+id/scoreOneScoreboard"
+            android:layout_marginBottom="108dp"
+            android:textSize="24sp" />
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="160dp"
+            android:layout_height="144dp"
+            android:id="@+id/scoreTwoScoreboard"
+            android:textSize="96sp"
+            tools:text="99"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display4"
+            app:layout_constraintTop_toBottomOf="@+id/cardsTwoScoreboard"
+            app:layout_constraintStart_toStartOf="@+id/cardsTwoScoreboard" />
+
+    <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="160dp"
+            android:layout_height="20dp"
+            android:id="@+id/cardsTwoScoreboard"
+            android:max="3"
+            android:progressTint="#FF9800"
+            app:layout_constraintStart_toStartOf="@+id/serverTwoScoreboard"
+            app:layout_constraintTop_toBottomOf="@+id/serverTwoScoreboard" />
+
+    <TextView
+            android:text="Server"
+            android:layout_width="160dp"
+            android:layout_height="20dp"
+            android:id="@+id/serverTwoScoreboard"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textAlignment="center"
+            android:textColor="#AEAEAE"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/serverOneScoreboard"
+            android:layout_marginEnd="20dp" />
+
+    <TextView
+            android:text="Team Two"
+            android:layout_width="160dp"
+            android:layout_height="80dp"
+            android:id="@+id/teamTwoScoreboard"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            app:layout_constraintTop_toBottomOf="@+id/scoreTwoScoreboard"
+            app:layout_constraintStart_toStartOf="@+id/scoreTwoScoreboard" />
+
+    <TextView
+            android:text="Server"
+            android:layout_width="160dp"
+            android:layout_height="20dp"
+            android:id="@+id/serverOneScoreboard"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textAlignment="center"
+            android:textColor="#AEAEAE"
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="20dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="204dp" />
+
+    <TextView
+            android:text="Team One"
+            android:layout_width="160dp"
+            android:layout_height="80dp"
+            android:id="@+id/teamOneScoreboard"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            app:layout_constraintStart_toStartOf="@+id/scoreOneScoreboard"
+            app:layout_constraintTop_toBottomOf="@+id/scoreOneScoreboard" />
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="160dp"
+            android:layout_height="144dp"
+            android:id="@+id/scoreOneScoreboard"
+            android:textSize="96sp"
+            tools:text="99"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display4"
+            app:layout_constraintTop_toBottomOf="@+id/cardsOneScoreboard"
+            app:layout_constraintStart_toStartOf="@+id/cardsOneScoreboard" />
+
+    <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="160dp"
+            android:layout_height="20dp"
+            android:id="@+id/cardsOneScoreboard"
+            android:max="3"
+            android:progressTint="#FF9800"
+            app:layout_constraintStart_toStartOf="@+id/serverOneScoreboard"
+            app:layout_constraintTop_toBottomOf="@+id/serverOneScoreboard" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

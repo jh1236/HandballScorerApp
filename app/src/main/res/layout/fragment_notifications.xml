@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.notifications.NotificationsFragment"
+        android:id="@+id/notimportatn">
+
+    <TextView
+            android:text="Aces:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView20"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="?android:textColorPrimary"
+            android:textStyle="italic"
+            app:layout_constraintTop_toBottomOf="@+id/textView30"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="@+id/textView30" />
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/statsAcesTwo"
+            app:layout_constraintTop_toTopOf="@+id/textView20"
+            app:layout_constraintBottom_toBottomOf="@+id/textView20"
+            app:layout_constraintStart_toStartOf="@+id/statsScoredTwo" />
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/statsAcesOne"
+            app:layout_constraintStart_toStartOf="@+id/statsScoredOne"
+            app:layout_constraintBottom_toBottomOf="@+id/textView40"
+            app:layout_constraintTop_toTopOf="@+id/textView40" />
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/statsCards"
+            app:layout_constraintStart_toStartOf="@+id/statsPercentage"
+            app:layout_constraintBottom_toBottomOf="@+id/textView15"
+            app:layout_constraintTop_toTopOf="@+id/textView15"
+            app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+            android:text="Cards:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView15"
+            app:layout_constraintStart_toStartOf="@+id/textView13"
+            app:layout_constraintTop_toBottomOf="@+id/textView13"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="?android:textColorPrimary"
+            android:textStyle="italic"
+            android:layout_marginTop="4dp" />
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/statsScoredTwo"
+            app:layout_constraintStart_toStartOf="@+id/statsTimeCardedOne"
+            app:layout_constraintBottom_toBottomOf="@+id/textView30"
+            app:layout_constraintTop_toTopOf="@+id/textView30"
+            app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/statsTimeCardedTwo"
+            app:layout_constraintStart_toStartOf="@+id/statsRedTwo"
+            app:layout_constraintBottom_toBottomOf="@+id/textView29"
+            app:layout_constraintTop_toTopOf="@+id/textView29"
+            app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/statsGreenTwo"
+            app:layout_constraintStart_toStartOf="@+id/statsScoredTwo"
+            app:layout_constraintBottom_toBottomOf="@+id/textView28"
+            app:layout_constraintTop_toTopOf="@+id/textView28"
+            app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/statsYellowTwo"
+            app:layout_constraintStart_toStartOf="@+id/statsGreenTwo"
+            app:layout_constraintBottom_toBottomOf="@+id/textView26"
+            app:layout_constraintTop_toTopOf="@+id/textView26"
+            app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/statsRedTwo"
+            app:layout_constraintStart_toStartOf="@+id/statsYellowTwo"
+            app:layout_constraintBottom_toBottomOf="@+id/textView27"
+            app:layout_constraintTop_toTopOf="@+id/textView27"
+            app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/statsLosses"
+            app:layout_constraintStart_toStartOf="@+id/statsWon"
+            app:layout_constraintBottom_toBottomOf="@+id/textView12"
+            app:layout_constraintTop_toTopOf="@+id/textView12" />
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/statsPercentage"
+            app:layout_constraintStart_toStartOf="@+id/statsLosses"
+            app:layout_constraintBottom_toBottomOf="@+id/textView13"
+            app:layout_constraintTop_toTopOf="@+id/textView13" />
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/statsScoredOne"
+            app:layout_constraintStart_toStartOf="@+id/statsPercentage"
+            app:layout_constraintBottom_toBottomOf="@+id/textView19"
+            app:layout_constraintTop_toTopOf="@+id/textView19" />
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/statsGreenOne"
+            app:layout_constraintStart_toStartOf="@+id/statsScoredOne"
+            app:layout_constraintBottom_toBottomOf="@+id/textView17"
+            app:layout_constraintTop_toTopOf="@+id/textView17"
+            app:layout_constraintVertical_bias="0.4" />
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/statsYellowOne"
+            app:layout_constraintStart_toStartOf="@+id/statsGreenOne"
+            app:layout_constraintBottom_toBottomOf="@+id/textView18"
+            app:layout_constraintTop_toTopOf="@+id/textView18"
+            app:layout_constraintVertical_bias="0.4" />
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/statsRedOne"
+            app:layout_constraintStart_toStartOf="@+id/statsYellowOne"
+            app:layout_constraintBottom_toBottomOf="@+id/textView16"
+            app:layout_constraintTop_toTopOf="@+id/textView16"
+            app:layout_constraintVertical_bias="0.4" />
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/statsTimeCardedOne"
+            app:layout_constraintStart_toStartOf="@+id/statsRedOne"
+            app:layout_constraintBottom_toBottomOf="@+id/textView25"
+            app:layout_constraintTop_toTopOf="@+id/textView25"
+            app:layout_constraintVertical_bias="0.4" />
+
+    <TextView
+            android:text="Player One"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/statsPlayerTwo"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/textView25"
+            app:layout_constraintTop_toBottomOf="@+id/textView25"
+            android:layout_marginTop="12dp" />
+
+    <TextView
+            android:text="Yellow Cards:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView26"
+            app:layout_constraintStart_toStartOf="@+id/textView28"
+            app:layout_constraintTop_toBottomOf="@+id/textView28"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="?android:textColorPrimary"
+            android:textStyle="italic"
+            android:layout_marginTop="4dp" />
+
+    <TextView
+            android:text="Red Cards:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView27"
+            app:layout_constraintStart_toStartOf="@+id/textView26"
+            app:layout_constraintTop_toBottomOf="@+id/textView26"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="?android:textColorPrimary"
+            android:textStyle="italic"
+            android:layout_marginTop="4dp" />
+
+    <TextView
+            android:text="Green Cards:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView28"
+            app:layout_constraintStart_toStartOf="@+id/textView20"
+            app:layout_constraintTop_toBottomOf="@+id/textView20"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="?android:textColorPrimary"
+            android:textStyle="italic"
+            android:layout_marginTop="4dp" />
+
+    <TextView
+            android:text="Time Spent Carded:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView29"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="?android:textColorPrimary"
+            app:layout_constraintStart_toStartOf="@+id/textView27"
+            app:layout_constraintTop_toBottomOf="@+id/textView27"
+            android:textStyle="italic"
+            android:layout_marginTop="4dp" />
+
+    <TextView
+            android:text="Points Scored:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView30"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="?android:textColorPrimary"
+            app:layout_constraintStart_toStartOf="@+id/statsPlayerTwo"
+            app:layout_constraintTop_toBottomOf="@+id/statsPlayerTwo"
+            android:textStyle="italic"
+            android:layout_marginTop="4dp" />
+
+    <TextView
+            android:text="Aces:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView40"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="?android:textColorPrimary"
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="@+id/textView19"
+            app:layout_constraintTop_toBottomOf="@+id/textView19"
+            android:layout_marginTop="4dp" />
+
+    <TextView
+            android:text="Points Scored:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView19"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="?android:textColorPrimary"
+            app:layout_constraintStart_toStartOf="@+id/statsPlayerOne"
+            app:layout_constraintTop_toBottomOf="@+id/statsPlayerOne"
+            android:textStyle="italic"
+            android:layout_marginTop="4dp" />
+
+    <TextView
+            android:text="Time Spent Carded:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView25"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="?android:textColorPrimary"
+            app:layout_constraintStart_toStartOf="@+id/textView16"
+            app:layout_constraintTop_toBottomOf="@+id/textView16"
+            android:textStyle="italic"
+            android:layout_marginTop="4dp" />
+
+    <TextView
+            android:text="Red Cards:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView16"
+            app:layout_constraintStart_toStartOf="@+id/textView18"
+            app:layout_constraintTop_toBottomOf="@+id/textView18"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="?android:textColorPrimary"
+            android:textStyle="italic"
+            android:layout_marginTop="4dp" />
+
+    <TextView
+            android:text="Green Cards:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView17"
+            app:layout_constraintStart_toStartOf="@+id/textView40"
+            app:layout_constraintTop_toBottomOf="@+id/textView40"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="?android:textColorPrimary"
+            android:textStyle="italic"
+            android:layout_marginTop="4dp" />
+
+    <TextView
+            android:text="Yellow Cards:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView18"
+            app:layout_constraintStart_toStartOf="@+id/textView17"
+            app:layout_constraintTop_toBottomOf="@+id/textView17"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="?android:textColorPrimary"
+            android:textStyle="italic"
+            android:layout_marginTop="4dp" />
+
+    <Spinner
+            android:id="@+id/statsTeamSelect"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="44dp"
+            app:layout_constraintTop_toBottomOf="@+id/textView10"
+            android:layout_marginTop="4dp" />
+
+    <TextView
+            android:text="Team Statistics"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView10"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/statsTeamSelect"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="4dp" />
+
+    <TextView
+            android:text="Wins:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView11"
+            app:layout_constraintStart_toStartOf="@+id/statsTeamSelect"
+            app:layout_constraintTop_toBottomOf="@+id/textView14"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="?android:textColorPrimary"
+            android:layout_marginTop="4dp"
+            android:textStyle="italic" />
+
+    <TextView
+            android:text="Losses:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView12"
+            app:layout_constraintStart_toStartOf="@+id/statsTeamSelect"
+            app:layout_constraintTop_toBottomOf="@+id/textView11"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:layout_marginTop="4dp"
+            android:textColor="?android:textColorPrimary"
+            android:textStyle="italic" />
+
+    <TextView
+            android:text="Win Percentage:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView13"
+            app:layout_constraintStart_toStartOf="@+id/statsTeamSelect"
+            app:layout_constraintTop_toBottomOf="@+id/textView12"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:layout_marginTop="4dp"
+            android:textColor="?android:textColorPrimary"
+            android:textStyle="italic" />
+
+    <TextView
+            android:text="Played:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView14"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="?android:textColorPrimary"
+            app:layout_constraintStart_toStartOf="@+id/statsTeamSelect"
+            app:layout_constraintTop_toBottomOf="@+id/statsTeamSelect"
+            android:layout_marginTop="4dp"
+            android:textStyle="italic" />
+
+    <TextView
+            android:text="Player One"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/statsPlayerOne"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/textView13"
+            app:layout_constraintTop_toBottomOf="@+id/textView15"
+            android:layout_marginTop="4dp" />
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/statsWon"
+            app:layout_constraintBottom_toBottomOf="@+id/textView11"
+            app:layout_constraintTop_toTopOf="@+id/textView11"
+            app:layout_constraintVertical_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/statsPlayed" />
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/statsPlayed"
+            app:layout_constraintStart_toEndOf="@+id/textView14"
+            android:layout_marginStart="112dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView14"
+            app:layout_constraintTop_toTopOf="@+id/textView14" />
+
+    <Button
+            android:text="Reload"
+            android:layout_width="94dp"
+            android:layout_height="40dp"
+            android:id="@+id/reloadStats"
+            app:layout_constraintStart_toStartOf="@+id/statsPlayed"
+            app:layout_constraintTop_toTopOf="parent"
+            android:backgroundTint="#673AB7" />
+</androidx.constraintlayout.widget.ConstraintLayout>

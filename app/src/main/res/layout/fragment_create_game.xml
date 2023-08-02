@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.notifications.NotificationsFragment">
+
+    <Button
+            android:text="Start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/startGame"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nextTeamOne"
+            android:layout_marginTop="16dp" />
+
+    <TextView
+            android:text="Next Match"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textAlignment="center"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="240dp" />
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="168dp"
+            android:layout_height="78dp"
+            android:id="@+id/nextTeamOne"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textAlignment="center"
+            app:layout_constraintTop_toTopOf="@+id/textView7"
+            app:layout_constraintEnd_toStartOf="@+id/textView2"
+            android:layout_marginEnd="-20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView7" />
+
+    <TextView
+            android:text="TextView"
+            android:layout_width="168dp"
+            android:layout_height="78dp"
+            android:id="@+id/nextTeamTwo"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:textAlignment="center"
+            app:layout_constraintTop_toTopOf="@+id/nextTeamOne"
+            app:layout_constraintStart_toEndOf="@+id/textView2"
+            android:layout_marginStart="-20dp" />
+
+    <TextView
+            android:text="VS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView7"
+            app:layout_constraintStart_toEndOf="@+id/nextTeamOne"
+            app:layout_constraintEnd_toStartOf="@+id/nextTeamTwo"
+            android:textAlignment="center"
+            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            android:layout_marginTop="40dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

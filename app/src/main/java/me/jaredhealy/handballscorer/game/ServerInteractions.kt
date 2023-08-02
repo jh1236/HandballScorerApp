@@ -15,7 +15,7 @@ import java.io.IOException
 object ServerInteractions {
     private val client = OkHttpClient()
 
-    private fun post(method: String, content: Map<Any, Any?>) {
+    private fun post(method: String, content: Map<Any, Any?>, recall: Boolean = true) {
         if (!Game.recordStats) return
         val body = RequestBody.create(
             MediaType.parse("application/json"), JSONObject(content).toString()
@@ -31,6 +31,7 @@ object ServerInteractions {
             override fun onResponse(call: Call, response: Response) {
             }
         })
+        if (!recall) return
         val mainHandler = Handler(Looper.getMainLooper())
         mainHandler.postDelayed({
             Competition.getTeamsFromApi()
@@ -48,11 +49,12 @@ object ServerInteractions {
         )
     }
 
-    fun start(time: Long) {
+    fun start(swapServe: Boolean, time: Long) {
         post(
             "games/update/start",
             mapOf(
-                "startTime" to time
+                "startTime" to time,
+                "swap" to swapServe
             )
         )
     }
@@ -69,13 +71,14 @@ object ServerInteractions {
         )
     }
 
-    fun yellowCard(team: Team, left: Boolean) {
+    fun yellowCard(team: Team, left: Boolean, time: Int) {
         post(
             "games/update/card",
             mapOf(
                 "color" to "yellow",
                 "firstTeam" to team.firstTeam,
                 "leftPlayer" to left,
+                "time" to time
             )
         )
     }
@@ -96,7 +99,7 @@ object ServerInteractions {
             "games/update/timeout",
             mapOf(
                 "firstTeam" to team.firstTeam
-            )
+            ), false
         )
     }
 }

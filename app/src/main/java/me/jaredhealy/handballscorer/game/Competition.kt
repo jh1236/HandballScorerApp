@@ -1,5 +1,7 @@
 package me.jaredhealy.handballscorer.game
 
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import me.jaredhealy.handballscorer.toMap
 import okhttp3.Call
@@ -11,15 +13,14 @@ import okhttp3.RequestBody
 import okhttp3.Response
 import org.json.JSONObject
 import java.io.IOException
+import java.lang.Exception
 
 
 object Competition {
     private val client = OkHttpClient()
+    private val callback = arrayListOf<() -> Unit>()
     fun getTeamsFromApi() {
-        teams.clear()
-        val request = Request.Builder()
-            .url("http://handball-tourney.zapto.org/api/teams")
-            .build()
+        val request = Request.Builder().url("http://handball-tourney.zapto.org/api/teams").build()
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
@@ -36,11 +37,13 @@ object Competition {
         })
     }
 
+    fun addCallback(func: () -> Unit) {
+        callback.add(func)
+    }
+
     fun getCurrentGame(tries_remaining: Int = 20) {
-        currentGame = null
-        val request = Request.Builder()
-            .url("http://handball-tourney.zapto.org/api/games/current")
-            .build()
+        val request =
+            Request.Builder().url("http://handball-tourney.zapto.org/api/games/current").build()
 
         client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
@@ -48,7 +51,12 @@ object Competition {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val string = response.body()?.string()
+                var string: String?
+                try {
+                    string = response.body()?.string()
+                } catch (e: Exception) {
+                    string = null
+                }
                 if (string != null) {
                     if (string != "none") {
                         val map = JSONObject(string).toMap()
@@ -60,11 +68,13 @@ object Competition {
                         )
                         currentGame!!.state =
                             if (map["started"] as Boolean) Game.State.PLAYING else Game.State.BEFORE_GAME
-                    } else {
-                        if (tries_remaining > 0) {
-                            getCurrentGame(tries_remaining - 1)
+                        for (i in callback) {
+                            val mainHandler = Handler(Looper.getMainLooper())
+                            mainHandler.post(i)
                         }
                     }
+                } else if (tries_remaining > 0) {
+                    getCurrentGame(tries_remaining - 1)
                 }
             }
         })
@@ -79,6 +89,7 @@ object Competition {
     private fun processTeams(string: String) {
         Log.i("api", string)
         val map = JSONObject(string).toMap()
+        teams.clear()
         for ((teamName, v) in map) {
             teams.add(
                 Team.fromMap(teamName, v as Map<String, *>)

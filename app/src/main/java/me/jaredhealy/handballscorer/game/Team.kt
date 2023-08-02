@@ -1,5 +1,6 @@
 package me.jaredhealy.handballscorer.game
 
+import android.util.Log
 import kotlin.math.max
 
 @Suppress("UNCHECKED_CAST")
@@ -31,7 +32,8 @@ class Team(var teamName: String, val leftPlayer: Player, val rightPlayer: Player
         teamName, Player(leftPlayer), Player(rightPlayer)
     )
 
-    private var timeOutsRemaining = 2
+    var timeOutsRemaining = 2
+        private set
 
     var firstTeam = false
         internal set
@@ -74,6 +76,7 @@ class Team(var teamName: String, val leftPlayer: Player, val rightPlayer: Player
         }
 
     fun start() {
+        Log.i("te", "START")
         if (Game.recordStats) {
             played++
         }
@@ -88,8 +91,11 @@ class Team(var teamName: String, val leftPlayer: Player, val rightPlayer: Player
     }
 
     fun callTimeout() {
-        ServerInteractions.timeout(this)
         timeOutsRemaining--
+        Log.i("timeouts", timeOutsRemaining.toString())
+        if (Game.recordStats) {
+            ServerInteractions.timeout(this)
+        }
         game.startTimeout()
     }
 
@@ -117,7 +123,9 @@ class Team(var teamName: String, val leftPlayer: Player, val rightPlayer: Player
         }
         if (player != null) {
             player.scoreGoal(ace)
-            ServerInteractions.score(this, player.isLeft, ace)
+            if (Game.recordStats) {
+                ServerInteractions.score(this, player.isLeft, ace)
+            }
         }
 
         if (!serving) {
@@ -129,7 +137,9 @@ class Team(var teamName: String, val leftPlayer: Player, val rightPlayer: Player
     fun greenCard(leftPlayer: Boolean) {
         greenCarded = true
         cards++
-        ServerInteractions.greenCard(this, leftPlayer)
+        if (Game.recordStats) {
+            ServerInteractions.greenCard(this, leftPlayer)
+        }
         if (leftPlayer) {
             this.leftPlayer.greenCard()
         } else {
@@ -139,7 +149,9 @@ class Team(var teamName: String, val leftPlayer: Player, val rightPlayer: Player
 
     fun yellowCard(leftPlayer: Boolean, time: Int = 3) {
         cards++
-        ServerInteractions.yellowCard(this, leftPlayer)
+        if (Game.recordStats) {
+            ServerInteractions.yellowCard(this, leftPlayer, time)
+        }
         if (leftPlayer) {
             this.leftPlayer.yellowCard()
             if (cardCountPlayerLeft >= 0) {
@@ -158,7 +170,9 @@ class Team(var teamName: String, val leftPlayer: Player, val rightPlayer: Player
 
     fun redCard(leftPlayer: Boolean) {
         cards++
-        ServerInteractions.redCard(this, leftPlayer)
+        if (Game.recordStats) {
+            ServerInteractions.redCard(this, leftPlayer)
+        }
         if (leftPlayer) {
             this.leftPlayer.redCard()
             cardCountPlayerLeft = -1

@@ -2,18 +2,19 @@ package me.jaredhealy.handballscorer.game
 
 import kotlin.math.abs
 
-class Game(val teamOne: Team, val teamTwo: Team, val goalsToWin: Int = 11) {
+class Game(var teamOne: Team, var teamTwo: Team, val goalsToWin: Int = 11) {
 
     companion object {
 
         var recordStats = true
 
-        fun loadFromString(team1: String, team2: String, string: String): Game {
+        fun loadFromString(team1: String, team2: String, string: String): Game? {
+            if (Competition.teams.isEmpty()) return null
             val teamOne = Competition.teams.first { it.teamName == team1 }
             val teamTwo = Competition.teams.first { it.teamName == team2 }
             recordStats = false
             val game = Game(teamOne, teamTwo)
-            game.startGame()
+            game.startGame(false)
             for (i in string.chunked(2)) {
                 val team = if (i[0].isUpperCase()) game.teamOne else game.teamTwo
                 val isLeft = i[1] == 'L'
@@ -42,13 +43,28 @@ class Game(val teamOne: Team, val teamTwo: Team, val goalsToWin: Int = 11) {
                         team.callTimeout()
                         game.endTimeout()
                     }
+
+                    else -> {
+                        if (i[0].isDigit()) {
+                            team.yellowCard(isLeft, i[0].toString().toInt())
+                        }
+                    }
+
                 }
             }
             recordStats = true
             return game
         }
+
+        fun dummyGame(): Game {
+            return Game(
+                Team("Team One", "Player One", "Player Two"),
+                Team("Team Two", "Player One", "Player Two")
+            )
+        }
     }
 
+    var swapped = false
     private var startTime: Long = -1
 
     var roundCount = 0
@@ -65,9 +81,9 @@ class Game(val teamOne: Team, val teamTwo: Team, val goalsToWin: Int = 11) {
     }
 
     enum class Service(val teamOne: Boolean, val isLeft: Boolean) {
-        TEAM_ONE_LEFT(true, true),
-        TEAM_TWO_LEFT(false, true),
-        TEAM_ONE_RIGHT(true, false),
+        TEAM_ONE_LEFT(true, true), TEAM_TWO_LEFT(false, true), TEAM_ONE_RIGHT(
+            true, false
+        ),
         TEAM_TWO_RIGHT(false, false)
     }
 
@@ -77,9 +93,9 @@ class Game(val teamOne: Team, val teamTwo: Team, val goalsToWin: Int = 11) {
 
     var state = State.BEFORE_GAME
 
-    fun startGame() {
+    fun startGame(swapServe: Boolean) {
         startTime = System.currentTimeMillis()
-        ServerInteractions.start(startTime)
+        ServerInteractions.start(swapServe, startTime)
         state = State.PLAYING
         teamOne.start()
         teamTwo.start()

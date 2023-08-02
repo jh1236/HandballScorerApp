@@ -7,6 +7,16 @@
         tools:context=".ui.notifications.NotificationsFragment">
 
     <Button
+            android:text="Swap Service"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/swapService"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nextTeamOne"
+            android:layout_marginTop="28dp" />
+
+    <Button
             android:text="Start"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -14,8 +24,8 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nextTeamOne"
-            android:layout_marginTop="16dp" />
+            app:layout_constraintTop_toBottomOf="@+id/swapService"
+            android:layout_marginTop="20dp" />
 
     <TextView
             android:text="Next Match"
@@ -40,7 +50,8 @@
             app:layout_constraintTop_toTopOf="@+id/textView7"
             app:layout_constraintEnd_toStartOf="@+id/textView2"
             android:layout_marginEnd="-20dp"
-            app:layout_constraintBottom_toBottomOf="@+id/textView7" />
+            app:layout_constraintBottom_toBottomOf="@+id/textView7"
+            app:layout_constraintVertical_bias="0.135" />
 
     <TextView
             android:text="TextView"
@@ -63,5 +74,21 @@
             android:textAlignment="center"
             app:layout_constraintTop_toBottomOf="@+id/textView2"
             android:layout_marginTop="40dp" />
+
+    <View
+            android:layout_width="168dp"
+            android:layout_height="10dp"
+            android:id="@+id/serveIndicatorOne"
+            app:layout_constraintStart_toStartOf="@+id/nextTeamOne"
+            app:layout_constraintBottom_toTopOf="@+id/nextTeamOne"
+            android:background="#719BE3" />
+
+    <View
+            android:layout_width="168dp"
+            android:layout_height="10dp"
+            android:id="@+id/serveIndicatorTwo"
+            app:layout_constraintBottom_toTopOf="@+id/nextTeamTwo"
+            app:layout_constraintStart_toStartOf="@+id/nextTeamTwo"
+            android:background="#719BE3" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

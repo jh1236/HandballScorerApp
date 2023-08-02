@@ -21,9 +21,20 @@ class CreateGameFragment : Fragment() {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+    private var swappedService = false
 
     private fun showControlPanel() {
         findNavController().navigate(R.id.navigation_dashboard)
+    }
+
+    private fun updateServeIndicators() {
+        if (!swappedService) {
+            binding.serveIndicatorOne.visibility = View.VISIBLE
+            binding.serveIndicatorTwo.visibility = View.INVISIBLE
+        } else {
+            binding.serveIndicatorOne.visibility = View.INVISIBLE
+            binding.serveIndicatorTwo.visibility = View.VISIBLE
+        }
     }
 
     override fun onCreateView(
@@ -33,21 +44,26 @@ class CreateGameFragment : Fragment() {
     ): View {
         super.onCreate(savedInstanceState)
         _binding = FragmentCreateGameBinding.inflate(inflater, container, false)
-
+        updateServeIndicators()
 
         if (Competition.currentGame == null) {
             Competition.getTeamsFromApi()
             findNavController().navigate(R.id.navigation_home)
             return binding.root
         }
-        if ((Competition.currentGame?.state ?: Game.State.BEFORE_GAME) != Game.State.BEFORE_GAME) {
+        val state = (Competition.currentGame?.state ?: Game.State.BEFORE_GAME)
+        if (state == Game.State.PLAYING || state == Game.State.TIMEOUT) {
             showControlPanel()
             return binding.root
         }
         binding.nextTeamOne.text = Competition.currentGame!!.teamOne.teamName
         binding.nextTeamTwo.text = Competition.currentGame!!.teamTwo.teamName
+        binding.swapService.setOnClickListener {
+            swappedService = !swappedService
+            updateServeIndicators()
+        }
         binding.startGame.setOnClickListener {
-            Competition.currentGame?.startGame()
+            Competition.currentGame?.startGame(swappedService)
             showControlPanel()
         }
 

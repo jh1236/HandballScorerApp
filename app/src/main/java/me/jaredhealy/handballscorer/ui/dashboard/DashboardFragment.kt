@@ -2,12 +2,13 @@ package me.jaredhealy.handballscorer.ui.dashboard
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.opengl.Visibility
 import android.os.Bundle
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.OnHierarchyChangeListener
+import android.widget.EditText
 import android.widget.ListView
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
@@ -24,6 +25,7 @@ import kotlin.math.max
 @SuppressLint("SetTextI18n")
 class DashboardFragment : Fragment() {
 
+
     private var _binding: FragmentDashboardBinding? = null
 
     // This property is only valid between onCreateView and
@@ -37,9 +39,20 @@ class DashboardFragment : Fragment() {
         get() = ResourcesCompat.getColor(resources, R.color.yellow_card, null)
     private val RED_CARD_COLOR
         get() = ResourcesCompat.getColor(resources, R.color.red_card, null)
+    private val DISABLED_TEXT_COLOR
+        get() = ResourcesCompat.getColor(resources, R.color.purple_200, null)
+    private val ENABLED_TEXT_COLOR
+        get() = ResourcesCompat.getColor(resources, R.color.white, null)
 
     val game: Game
-        get() = Competition.currentGame!!
+        get() {
+            return if (Competition.currentGame != null) {
+                Competition.currentGame!!
+            } else {
+                exit()
+                Game.dummyGame()
+            }
+        }
 
     private fun exit() {
         findNavController().navigate(R.id.navigation_create_game)
@@ -53,9 +66,7 @@ class DashboardFragment : Fragment() {
         val builder = AlertDialog.Builder(activity)
         builder.setTitle(questionString).setSingleChoiceItems(
             arrayOf(
-                team.leftPlayer.name,
-                team.rightPlayer.name,
-                *extraArgs
+                team.leftPlayer.name, team.rightPlayer.name, *extraArgs
             ), -1
         ) { _, which ->
             wasLeftPlayer = which
@@ -94,6 +105,7 @@ class DashboardFragment : Fragment() {
         builder.setCustomTitle(textView).setPositiveButton("Done") { dialog, _ ->
             thread.interrupt()
             Competition.currentGame!!.endTimeout()
+            updateDisplays()
             dialog.cancel()
         }
         builder.setCancelable(false)
@@ -124,8 +136,10 @@ class DashboardFragment : Fragment() {
         binding.totalRounds.text = game.roundCount.toString()
         binding.cardsTeamOne.visibility = View.INVISIBLE
         binding.cardsTeamTwo.visibility = View.INVISIBLE
-        binding.timeOutOneBtn.isEnabled = game.teamOne.allowedTimeout()
-        binding.timeOutTwoBtn.isEnabled = game.teamTwo.allowedTimeout()
+        binding.timeOutOneBtn.setTextColor(if (game.teamOne.allowedTimeout()) ENABLED_TEXT_COLOR else DISABLED_TEXT_COLOR)
+        binding.timeOutTwoBtn.setTextColor(if (game.teamTwo.allowedTimeout()) ENABLED_TEXT_COLOR else DISABLED_TEXT_COLOR)
+        binding.timeOutOneBtn.text = "Timeout ${game.teamOne} (${game.teamOne.timeOutsRemaining})"
+        binding.timeOutTwoBtn.text = "Timeout ${game.teamTwo} (${game.teamTwo.timeOutsRemaining})"
         if (game.isOver()) {
             binding.totalRounds.text = "${game.getWinningTeam()!!} Wins!"
         }
@@ -188,8 +202,8 @@ class DashboardFragment : Fragment() {
         binding.yellowTwoBtn.text = "Yellow card ${game.teamTwo}"
         binding.redOneBtn.text = "Red card ${game.teamOne}"
         binding.redTwoBtn.text = "Red card ${game.teamTwo}"
-        binding.timeOutOneBtn.text = "Timeout ${game.teamOne}"
-        binding.timeOutTwoBtn.text = "Timeout ${game.teamTwo}"
+        binding.timeOutOneBtn.text = "Timeout ${game.teamOne} (${game.teamOne.timeOutsRemaining})"
+        binding.timeOutTwoBtn.text = "Timeout ${game.teamTwo} (${game.teamTwo.timeOutsRemaining})"
         binding.scoreOneBtn.setOnClickListener {
             if (game.state == Game.State.PLAYING) {
                 var extraArgs = arrayOf<String>()
@@ -269,6 +283,48 @@ class DashboardFragment : Fragment() {
                 exit()
             }
         }
+        binding.yellowOneBtn.setOnLongClickListener {
+            if (game.state == Game.State.PLAYING) {
+                whichPlayer("Which Player", game.teamOne) {
+                    val builder = AlertDialog.Builder(activity)
+                    val input = EditText(context);
+                    input.inputType = InputType.TYPE_CLASS_NUMBER
+                    input.setText("3")
+                    builder.setTitle("How many rounds").setPositiveButton("Done") { dialog, id ->
+                        game.teamOne.yellowCard(it == 0, input.text.toString().toInt())
+                        updateDisplays()
+                        dialog.dismiss()
+                    }.setNegativeButton("Cancel") { dialog, id ->
+                        dialog.dismiss()
+                    }.setView(input)
+                    builder.create().show()
+                }
+            } else {
+                exit()
+            }
+            true
+        }
+        binding.yellowTwoBtn.setOnLongClickListener {
+            if (game.state == Game.State.PLAYING) {
+                whichPlayer("Which Player", game.teamTwo) {
+                    val builder = AlertDialog.Builder(activity)
+                    val input = EditText(context);
+                    input.inputType = InputType.TYPE_CLASS_NUMBER
+                    input.setText("3")
+                    builder.setTitle("How many rounds").setPositiveButton("Done") { dialog, id ->
+                        game.teamTwo.yellowCard(it == 0, input.text.toString().toInt())
+                        updateDisplays()
+                        dialog.dismiss()
+                    }.setNegativeButton("Cancel") { dialog, id ->
+                        dialog.dismiss()
+                    }.setView(input)
+                    builder.create().show()
+                }
+            } else {
+                exit()
+            }
+            true
+        }
         binding.redOneBtn.setOnClickListener {
             if (game.state == Game.State.PLAYING) {
                 whichPlayer("Which Player", game.teamOne) {
@@ -291,22 +347,30 @@ class DashboardFragment : Fragment() {
             }
         }
         binding.timeOutOneBtn.setOnClickListener {
-            if (game.state == Game.State.PLAYING) {
+            if (game.state == Game.State.PLAYING && game.teamOne.allowedTimeout()) {
                 game.teamOne.callTimeout()
-                
                 timeOut()
             } else {
                 exit()
             }
         }
         binding.timeOutTwoBtn.setOnClickListener {
-            if (game.state == Game.State.PLAYING) {
+            if (game.state == Game.State.PLAYING && game.teamTwo.allowedTimeout()) {
                 game.teamTwo.callTimeout()
-                binding.timeOutTwoBtn.isEnabled = game.teamTwo.allowedTimeout()
                 timeOut()
             } else {
                 exit()
             }
+        }
+        binding.timeOutOneBtn.setOnLongClickListener {
+            game.teamOne.callTimeout()
+            timeOut()
+            true
+        }
+        binding.timeOutTwoBtn.setOnLongClickListener {
+            game.teamTwo.callTimeout()
+            timeOut()
+            true
         }
         return root
     }

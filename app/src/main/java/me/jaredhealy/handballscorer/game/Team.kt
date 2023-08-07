@@ -4,15 +4,15 @@ import android.util.Log
 import kotlin.math.max
 
 @Suppress("UNCHECKED_CAST")
-class Team(var teamName: String, val leftPlayer: Player, val rightPlayer: Player) {
+class Team(var teamName: String, val playerOne: Player, val playerTwo: Player) {
     companion object {
         fun fromMap(teamName: String, map: Map<String, *>): Team {
             val played = map["played"] as Int
             val wins = map["wins"] as Int
             val losses = map["losses"] as Int
             val cards = map["cards"] as Int
-            val left = Player.fromMap(map["leftPlayer"] as Map<String, *>)
-            val right = Player.fromMap(map["rightPlayer"] as Map<String, *>)
+            val left = Player.fromMap(map["playerOne"] as Map<String, *>)
+            val right = Player.fromMap(map["playerTwo"] as Map<String, *>)
             val team = Team(teamName, left, right)
             team.played = played
             team.wins = wins
@@ -23,10 +23,13 @@ class Team(var teamName: String, val leftPlayer: Player, val rightPlayer: Player
     }
 
     init {
-        leftPlayer.isLeft = true
-        rightPlayer.isLeft = false
+        playerOne.isPlayerOne = true
+        playerTwo.isPlayerOne = false
     }
 
+    override operator fun equals(other: Any?): Boolean {
+        return this.teamName == (other as? Team)?.teamName
+    }
 
     constructor(teamName: String, leftPlayer: String, rightPlayer: String) : this(
         teamName, Player(leftPlayer), Player(rightPlayer)
@@ -45,8 +48,10 @@ class Team(var teamName: String, val leftPlayer: Player, val rightPlayer: Player
     lateinit var opponent: Team
     var score = 0
         private set
-    private var cardCountPlayerLeft = 0
-    private var cardCountPlayerRight = 0
+    private var cardDurationPlayerOne = 3
+    private var cardDurationPlayerTwo = 3
+    private var cardCountPlayerOne = 0
+    private var cardCountPlayerTwo = 0
     var cards = 0
         private set
     var played = 0
@@ -60,33 +65,39 @@ class Team(var teamName: String, val leftPlayer: Player, val rightPlayer: Player
     override fun toString() = teamName
     val cardCount: Int
         get() {
-            if (cardCountPlayerLeft == -1 || cardCountPlayerRight == -1) {
+            if (cardCountPlayerOne == -1 || cardCountPlayerTwo == -1) {
                 return -1
             }
-            return max(cardCountPlayerRight, cardCountPlayerLeft)
+            return max(cardCountPlayerTwo, cardCountPlayerOne)
         }
-
-    val server: Player
+    val cardDuration: Int
         get() {
-            return if ((game.serving.isLeft && !leftPlayer.isCarded) || rightPlayer.isCarded) {
-                leftPlayer
+            return if (cardCountPlayerOne > cardCountPlayerTwo) {
+                cardDurationPlayerOne
             } else {
-                rightPlayer
+                cardDurationPlayerTwo
             }
         }
 
-    fun start() {
-        Log.i("te", "START")
+    var server: Player = playerOne
+
+    fun start(swapPlayers: Boolean) {
         if (Game.recordStats) {
             played++
         }
-        leftPlayer.redCarded = false
-        rightPlayer.redCarded = false
-        leftPlayer.isCarded = false
-        rightPlayer.isCarded = false
+        server = if (!(swapPlayers xor serving)) {
+            playerTwo
+        } else {
+            playerOne
+        }
+        Log.i("asd", "Game started, server is ${server.name} ($swapPlayers)")
+        playerOne.redCarded = false
+        playerTwo.redCarded = false
+        playerOne.isCarded = false
+        playerTwo.isCarded = false
         greenCarded = false
-        cardCountPlayerLeft = 0
-        cardCountPlayerRight = 0
+        cardCountPlayerOne = 0
+        cardCountPlayerTwo = 0
         timeOutsRemaining = 2
     }
 
@@ -103,20 +114,19 @@ class Team(var teamName: String, val leftPlayer: Player, val rightPlayer: Player
         return timeOutsRemaining > 0
     }
 
-    fun addScore(leftPlayer: Boolean? = null) {
-        addScoreInternal(leftPlayer)
-
+    fun addScore(firstPlayer: Boolean? = null) {
+        addScoreInternal(firstPlayer)
     }
 
-    private fun addScoreInternal(leftPlayer: Boolean? = null, ace: Boolean = false) {
+    private fun addScoreInternal(firstPlayer: Boolean? = null, ace: Boolean = false) {
         score++
-        val player = when (leftPlayer) {
+        val player = when (firstPlayer) {
             true -> {
-                this.leftPlayer
+                this.playerOne
             }
 
             false -> {
-                this.rightPlayer
+                this.playerTwo
             }
 
             else -> null
@@ -124,82 +134,104 @@ class Team(var teamName: String, val leftPlayer: Player, val rightPlayer: Player
         if (player != null) {
             player.scoreGoal(ace)
             if (Game.recordStats) {
-                ServerInteractions.score(this, player.isLeft, ace)
+                ServerInteractions.score(this, player.isPlayerOne, ace)
             }
         }
-
         if (!serving) {
-            game.cycleService()
+            setServer()
         }
         game.nextPoint()
     }
 
-    fun greenCard(leftPlayer: Boolean) {
-        greenCarded = true
-        cards++
-        if (Game.recordStats) {
-            ServerInteractions.greenCard(this, leftPlayer)
-        }
-        if (leftPlayer) {
-            this.leftPlayer.greenCard()
+    private fun setServer() {
+        game.serving = this
+        serving = true
+        opponent.serving = false
+        if (this.server == this.playerOne) {
+            this.server = playerTwo
         } else {
-            this.rightPlayer.greenCard()
+            this.server = playerOne
         }
     }
 
-    fun yellowCard(leftPlayer: Boolean, time: Int = 3) {
+    fun greenCard(firstPlayer: Boolean) {
+        greenCarded = true
         cards++
         if (Game.recordStats) {
-            ServerInteractions.yellowCard(this, leftPlayer, time)
+            ServerInteractions.greenCard(this, firstPlayer)
         }
-        if (leftPlayer) {
-            this.leftPlayer.yellowCard()
-            if (cardCountPlayerLeft >= 0) {
-                cardCountPlayerLeft += time
+        if (firstPlayer) {
+            this.playerOne.greenCard()
+        } else {
+            this.playerTwo.greenCard()
+        }
+    }
+
+    fun yellowCard(firstPlayer: Boolean, time: Int = 3) {
+        cards++
+        if (Game.recordStats) {
+            ServerInteractions.yellowCard(this, firstPlayer, time)
+        }
+        Log.i("game", "$time round card")
+        if (firstPlayer) {
+            this.playerOne.yellowCard()
+            if (cardCountPlayerOne >= 0) {
+                cardCountPlayerOne += time
+                cardDurationPlayerOne = cardCountPlayerOne
             }
         } else {
-            this.rightPlayer.yellowCard()
-            if (cardCountPlayerRight >= 0) {
-                cardCountPlayerRight += time
+            this.playerTwo.yellowCard()
+            if (cardCountPlayerTwo >= 0) {
+                cardCountPlayerTwo += time
+                cardDurationPlayerTwo = cardCountPlayerTwo
             }
         }
-        while (cardCountPlayerLeft != 0 && cardCountPlayerRight != 0 && !game.isOver()) {
+        Log.i("game", "$cardDuration")
+        while (cardCountPlayerOne != 0 && cardCountPlayerTwo != 0 && !game.isOver()) {
             opponent.addScore()
         }
     }
 
-    fun redCard(leftPlayer: Boolean) {
+    fun redCard(firstPlayer: Boolean) {
         cards++
         if (Game.recordStats) {
-            ServerInteractions.redCard(this, leftPlayer)
+            ServerInteractions.redCard(this, firstPlayer)
         }
-        if (leftPlayer) {
-            this.leftPlayer.redCard()
-            cardCountPlayerLeft = -1
+        if (firstPlayer) {
+            this.playerOne.redCard()
+            cardCountPlayerOne = -1
         } else {
-            this.rightPlayer.redCard()
-            cardCountPlayerRight = -1
+            this.playerTwo.redCard()
+            cardCountPlayerTwo = -1
         }
-        while (cardCountPlayerLeft != 0 && cardCountPlayerRight != 0 && !game.isOver()) {
+        while (cardCountPlayerOne != 0 && cardCountPlayerTwo != 0 && !game.isOver()) {
             opponent.addScore()
         }
     }
 
     internal fun nextPoint() {
-        leftPlayer.nextPoint()
-        rightPlayer.nextPoint()
-        if (cardCountPlayerLeft > 0) {
-            cardCountPlayerLeft -= 1
+        playerOne.nextPoint()
+        playerTwo.nextPoint()
+        if (cardCountPlayerOne > 0) {
+            cardCountPlayerOne -= 1
+        } else {
+            cardDurationPlayerOne = 3
         }
-        if (cardCountPlayerRight > 0) {
-            cardCountPlayerRight -= 1
+        if (cardCountPlayerTwo > 0) {
+            cardCountPlayerTwo -= 1
+        } else {
+            cardDurationPlayerTwo = 3
         }
-        leftPlayer.isCarded = cardCountPlayerLeft != 0
-        rightPlayer.isCarded = cardCountPlayerRight != 0
+        playerOne.isCarded = cardCountPlayerOne != 0
+        playerTwo.isCarded = cardCountPlayerTwo != 0
     }
 
-    fun ace(leftPlayer: Boolean? = null) {
-        addScoreInternal(leftPlayer ?: this.server.isLeft, true)
+    fun ace(firstPlayer: Boolean? = null) {
+        addScoreInternal(firstPlayer ?: this.server.isPlayerOne, true)
+    }
+
+    override fun hashCode(): Int {
+        return teamName.hashCode()
     }
 
 }

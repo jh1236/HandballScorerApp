@@ -2,41 +2,50 @@ package me.jaredhealy.handballscorer.game
 
 import kotlin.math.abs
 
-class Game(var teamOne: Team, var teamTwo: Team, val goalsToWin: Int = 11) {
+class Game(var teamOne: Team, var teamTwo: Team, private val goalsToWin: Int = 11) {
 
     companion object {
 
         var recordStats = true
 
-        fun loadFromString(team1: String, team2: String, string: String): Game? {
+        fun loadFromMap(map: Map<String, *>): Game? {
             if (Competition.teams.isEmpty()) return null
-            val teamOne = Competition.teams.first { it.teamName == team1 }
-            val teamTwo = Competition.teams.first { it.teamName == team2 }
+            val teamOne = Competition.teams.first { it.teamName == map["teamOne"] }
+            val teamTwo = Competition.teams.first { it.teamName == map["teamTwo"] }
             recordStats = false
             val game = Game(teamOne, teamTwo)
-            game.startGame(false)
+            if (!(map["started"] as Boolean)) {
+                recordStats = true
+                return game
+            }
+            game.startGame(
+                map["swapped"] as Boolean,
+                map["swapTeamOne"] as Boolean,
+                map["swapTeamTwo"] as Boolean
+            )
+            val string = map["game"].toString()
             for (i in string.chunked(2)) {
-                val team = if (i[0].isUpperCase()) game.teamOne else game.teamTwo
-                val isLeft = i[1] == 'L'
+                val team = if (i[1].isUpperCase()) game.teamOne else game.teamTwo
+                val isFirstPlayer = i[1].uppercase() == "L"
                 when (i[0].lowercase()) {
                     "s" -> {
-                        team.addScore(isLeft)
+                        team.addScore(isFirstPlayer)
                     }
 
                     "a" -> {
-                        team.ace(isLeft)
+                        team.ace(isFirstPlayer)
                     }
 
                     "g" -> {
-                        team.greenCard(isLeft)
+                        team.greenCard(isFirstPlayer)
                     }
 
                     "y" -> {
-                        team.yellowCard(isLeft)
+                        team.yellowCard(isFirstPlayer)
                     }
 
                     "v" -> {
-                        team.redCard(isLeft)
+                        team.redCard(isFirstPlayer)
                     }
 
                     "t" -> {
@@ -46,7 +55,11 @@ class Game(var teamOne: Team, var teamTwo: Team, val goalsToWin: Int = 11) {
 
                     else -> {
                         if (i[0].isDigit()) {
-                            team.yellowCard(isLeft, i[0].toString().toInt())
+                            if (i[0] == '0') {
+                                team.yellowCard(isFirstPlayer, 10)
+                            } else {
+                                team.yellowCard(isFirstPlayer, i[0].toString().toInt())
+                            }
                         }
                     }
 
@@ -64,8 +77,10 @@ class Game(var teamOne: Team, var teamTwo: Team, val goalsToWin: Int = 11) {
         }
     }
 
-    var swapped = false
+    var serveLeft = true
+        private set
     private var startTime: Long = -1
+    private var swapped: Boolean = false
 
     var roundCount = 0
         private set
@@ -80,12 +95,8 @@ class Game(var teamOne: Team, var teamTwo: Team, val goalsToWin: Int = 11) {
         teamOne.serving = true
     }
 
-    enum class Service(val teamOne: Boolean, val isLeft: Boolean) {
-        TEAM_ONE_LEFT(true, true), TEAM_TWO_LEFT(false, true), TEAM_ONE_RIGHT(
-            true, false
-        ),
-        TEAM_TWO_RIGHT(false, false)
-    }
+
+    var serviceCounter = 0
 
     enum class State {
         PLAYING, BEFORE_GAME, GAME_WON, TIMEOUT
@@ -93,12 +104,24 @@ class Game(var teamOne: Team, var teamTwo: Team, val goalsToWin: Int = 11) {
 
     var state = State.BEFORE_GAME
 
-    fun startGame(swapServe: Boolean) {
+    var serving: Team = teamOne
+
+    fun startGame(swapServe: Boolean, swapTeamOne: Boolean, swapTeamTwo: Boolean) {
         startTime = System.currentTimeMillis()
-        ServerInteractions.start(swapServe, startTime)
+        ServerInteractions.start(swapServe, swapTeamOne, swapTeamTwo, startTime)
+        swapped = swapServe
+        if (swapServe) {
+            teamTwo.serving = true
+            teamOne.serving = false
+            this.serving = teamTwo
+        } else{
+            teamOne.serving = true
+            teamTwo.serving = false
+            this.serving = teamOne
+        }
         state = State.PLAYING
-        teamOne.start()
-        teamTwo.start()
+        teamOne.start(swapTeamOne)
+        teamTwo.start(swapTeamTwo)
     }
 
     fun startTimeout() {
@@ -109,15 +132,6 @@ class Game(var teamOne: Team, var teamTwo: Team, val goalsToWin: Int = 11) {
         state = State.PLAYING
     }
 
-    var serving = Service.TEAM_ONE_LEFT
-        private set
-
-
-    internal fun cycleService() {
-        serving = Service.values()[(serving.ordinal + 1) % Service.values().size]
-        teamOne.serving = serving.teamOne
-        teamTwo.serving = !serving.teamOne
-    }
 
     internal fun nextPoint() {
         roundCount++

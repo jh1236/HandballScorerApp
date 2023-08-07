@@ -25,9 +25,10 @@ class CreateGameFragment : Fragment() {
 
     private fun showControlPanel() {
         findNavController().navigate(R.id.navigation_dashboard)
+        findNavController()
     }
 
-    private fun updateServeIndicators() {
+    private fun updateDisplay() {
         if (!swappedService) {
             binding.serveIndicatorOne.visibility = View.VISIBLE
             binding.serveIndicatorTwo.visibility = View.INVISIBLE
@@ -35,6 +36,10 @@ class CreateGameFragment : Fragment() {
             binding.serveIndicatorOne.visibility = View.INVISIBLE
             binding.serveIndicatorTwo.visibility = View.VISIBLE
         }
+        binding.leftPlayerOne.text = Competition.currentGame!!.teamOne.playerOne.name
+        binding.rightPlayerOne.text = Competition.currentGame!!.teamOne.playerTwo.name
+        binding.leftPlayerTwo.text = Competition.currentGame!!.teamTwo.playerOne.name
+        binding.rightPlayerTwo.text = Competition.currentGame!!.teamTwo.playerTwo.name
     }
 
     override fun onCreateView(
@@ -44,7 +49,7 @@ class CreateGameFragment : Fragment() {
     ): View {
         super.onCreate(savedInstanceState)
         _binding = FragmentCreateGameBinding.inflate(inflater, container, false)
-        updateServeIndicators()
+        updateDisplay()
 
         if (Competition.currentGame == null) {
             Competition.getTeamsFromApi()
@@ -60,13 +65,12 @@ class CreateGameFragment : Fragment() {
         binding.nextTeamTwo.text = Competition.currentGame!!.teamTwo.teamName
         binding.swapService.setOnClickListener {
             swappedService = !swappedService
-            updateServeIndicators()
+            updateDisplay()
         }
         binding.startGame.setOnClickListener {
-            Competition.currentGame?.startGame(swappedService)
+            Competition.currentGame?.startGame(swappedService, binding.rightPlayerOne.isChecked, binding.rightPlayerTwo.isChecked)
             showControlPanel()
         }
-
         return binding.root
     }
 

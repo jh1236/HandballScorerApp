@@ -6,6 +6,16 @@
         android:layout_height="match_parent"
         tools:context=".ui.notifications.NotificationsFragment">
 
+    <TextView
+            android:text="Left Player:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView3"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintStart_toStartOf="@+id/radioGroup3"
+            app:layout_constraintEnd_toEndOf="@+id/radioGroup3"
+            app:layout_constraintBottom_toTopOf="@+id/radioGroup3" />
+
     <Button
             android:text="Swap Service"
             android:layout_width="wrap_content"
@@ -13,7 +23,7 @@
             android:id="@+id/swapService"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/nextTeamOne"
+            app:layout_constraintTop_toBottomOf="@+id/radioGroup2"
             android:layout_marginTop="28dp" />
 
     <Button
@@ -25,7 +35,7 @@
             app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/swapService"
-            android:layout_marginTop="20dp" />
+            android:layout_marginTop="28dp" />
 
     <TextView
             android:text="Next Match"
@@ -38,7 +48,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             android:textAlignment="center"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="240dp" />
+            android:layout_marginTop="156dp" />
 
     <TextView
             android:text="TextView"
@@ -47,11 +57,10 @@
             android:id="@+id/nextTeamOne"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:textAlignment="center"
-            app:layout_constraintTop_toTopOf="@+id/textView7"
-            app:layout_constraintEnd_toStartOf="@+id/textView2"
-            android:layout_marginEnd="-20dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView7"
-            app:layout_constraintVertical_bias="0.135" />
+            android:layout_marginBottom="-36dp"
+            app:layout_constraintEnd_toStartOf="@+id/textView7"
+            android:layout_marginEnd="24dp" />
 
     <TextView
             android:text="TextView"
@@ -61,19 +70,20 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:textAlignment="center"
             app:layout_constraintTop_toTopOf="@+id/nextTeamOne"
-            app:layout_constraintStart_toEndOf="@+id/textView2"
-            android:layout_marginStart="-20dp" />
+            app:layout_constraintStart_toEndOf="@+id/textView7"
+            android:layout_marginStart="24dp" />
 
     <TextView
             android:text="VS"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textView7"
-            app:layout_constraintStart_toEndOf="@+id/nextTeamOne"
-            app:layout_constraintEnd_toStartOf="@+id/nextTeamTwo"
             android:textAlignment="center"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView2"
-            android:layout_marginTop="40dp" />
+            android:layout_marginTop="36dp" />
 
     <View
             android:layout_width="168dp"
@@ -90,5 +100,61 @@
             app:layout_constraintBottom_toTopOf="@+id/nextTeamTwo"
             app:layout_constraintStart_toStartOf="@+id/nextTeamTwo"
             android:background="#719BE3" />
+
+    <RadioGroup
+            android:layout_width="114dp"
+            android:layout_height="97dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nextTeamTwo"
+            android:layout_marginEnd="24dp"
+            android:layout_marginTop="36dp"
+            android:id="@+id/radioGroup3">
+
+        <RadioButton
+                android:text="RadioButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/leftPlayerTwo"
+                android:checked="true" />
+
+        <RadioButton
+                android:text="RadioButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/rightPlayerTwo" />
+    </RadioGroup>
+
+    <RadioGroup
+            android:layout_width="114dp"
+            android:layout_height="97dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nextTeamOne"
+            android:layout_marginTop="36dp"
+            android:layout_marginStart="24dp"
+            android:id="@+id/radioGroup2">
+
+        <RadioButton
+                android:text="RadioButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/leftPlayerOne"
+                android:checked="true" />
+
+        <RadioButton
+                android:text="RadioButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/rightPlayerOne" />
+    </RadioGroup>
+
+    <TextView
+            android:text="Left Player:"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView"
+            app:layout_constraintEnd_toEndOf="@+id/radioGroup2"
+            app:layout_constraintStart_toStartOf="@+id/radioGroup2"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            app:layout_constraintBottom_toTopOf="@+id/radioGroup2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

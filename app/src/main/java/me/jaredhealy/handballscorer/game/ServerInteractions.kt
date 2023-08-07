@@ -38,58 +38,60 @@ object ServerInteractions {
         }, 500)
     }
 
-    fun score(team: Team, isLeft: Boolean?, ace: Boolean) {
+    fun score(team: Team, first: Boolean?, ace: Boolean) {
         post(
             "games/update/score",
             mapOf(
                 "firstTeam" to team.firstTeam,
-                "leftPlayer" to isLeft,
+                "firstPlayer" to first,
                 "ace" to ace
             )
         )
     }
 
-    fun start(swapServe: Boolean, time: Long) {
+    fun start(swapServe: Boolean, swapTeamOne: Boolean, swapTeamTwo: Boolean, time: Long) {
         post(
             "games/update/start",
             mapOf(
                 "startTime" to time,
-                "swap" to swapServe
+                "swap" to swapServe,
+                "swapTeamOne" to swapTeamOne,
+                "swapTeamTwo" to swapTeamTwo
             )
         )
     }
 
 
-    fun greenCard(team: Team, left: Boolean) {
+    fun greenCard(team: Team, first: Boolean) {
         post(
             "games/update/card",
             mapOf(
                 "color" to "green",
                 "firstTeam" to team.firstTeam,
-                "leftPlayer" to left,
+                "firstPlayer" to first,
             )
         )
     }
 
-    fun yellowCard(team: Team, left: Boolean, time: Int) {
+    fun yellowCard(team: Team, first: Boolean, time: Int) {
         post(
             "games/update/card",
             mapOf(
                 "color" to "yellow",
                 "firstTeam" to team.firstTeam,
-                "leftPlayer" to left,
+                "firstPlayer" to first,
                 "time" to time
             )
         )
     }
 
-    fun redCard(team: Team, left: Boolean) {
+    fun redCard(team: Team, first: Boolean) {
         post(
             "games/update/card",
             mapOf(
                 "color" to "red",
                 "firstTeam" to team.firstTeam,
-                "leftPlayer" to left,
+                "firstPlayer" to first,
             )
         )
     }

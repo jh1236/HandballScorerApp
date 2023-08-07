@@ -6,18 +6,28 @@
         android:layout_height="match_parent"
         tools:context=".ui.home.HomeFragment">
 
+    <ImageButton
+            android:src="@android:drawable/stat_notify_sync_noanim"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/swapButtonDisplay"
+            app:layout_constraintTop_toTopOf="@+id/serverOneScoreboard"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="-48dp" />
+
     <TextView
             android:text="99"
             android:layout_width="47dp"
             android:layout_height="35dp"
             android:id="@+id/totalRoundsScoreboard"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardsTeamOne"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="@+id/scoreOneScoreboard"
-            android:layout_marginBottom="108dp"
+            android:layout_marginBottom="72dp"
             android:textSize="24sp" />
 
     <TextView
@@ -77,7 +87,7 @@
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="20dp"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="204dp" />
+            android:layout_marginTop="160dp" />
 
     <TextView
             android:text="Team One"
@@ -110,5 +120,63 @@
             android:progressTint="#FF9800"
             app:layout_constraintStart_toStartOf="@+id/serverOneScoreboard"
             app:layout_constraintTop_toBottomOf="@+id/serverOneScoreboard" />
+
+    <TextView
+            android:text=" "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lineOne"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/teamOneScoreboard"
+            android:layout_marginTop="36dp"
+            android:alpha="1.0" />
+
+    <TextView
+            android:text=" "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lineTwo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lineOne"
+            tools:text=" "
+            android:alpha=".8" />
+
+    <TextView
+            android:text=" "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lineThree"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lineTwo"
+            android:alpha=".6" />
+
+    <TextView
+            android:text=" "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lineFour"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lineThree"
+            android:alpha=".4" />
+
+    <TextView
+            android:text=" "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/lineFive"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.501"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lineThree"
+            android:layout_marginTop="20dp"
+            android:alpha=".2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

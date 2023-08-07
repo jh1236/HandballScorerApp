@@ -3,7 +3,6 @@ package me.jaredhealy.handballscorer.ui.notifications
 import android.R
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,20 +36,20 @@ class NotificationsFragment : Fragment(), AdapterView.OnItemSelectedListener {
             binding.statsPercentage.text = "NAN"
         }
         binding.statsCards.text = selectedTeam.cards.toString()
-        binding.statsPlayerOne.text = selectedTeam.leftPlayer.name
-        binding.statsScoredOne.text = selectedTeam.leftPlayer.goalsScored.toString()
-        binding.statsAcesOne.text = selectedTeam.leftPlayer.aces.toString()
-        binding.statsGreenOne.text = selectedTeam.leftPlayer.greenCards.toString()
-        binding.statsYellowOne.text = selectedTeam.leftPlayer.yellowCards.toString()
-        binding.statsRedOne.text = selectedTeam.leftPlayer.redCards.toString()
-        binding.statsTimeCardedOne.text = "${selectedTeam.leftPlayer.roundsCarded} points"
-        binding.statsPlayerTwo.text = selectedTeam.rightPlayer.name
-        binding.statsScoredTwo.text = selectedTeam.rightPlayer.goalsScored.toString()
-        binding.statsAcesTwo.text = selectedTeam.rightPlayer.aces.toString()
-        binding.statsGreenTwo.text = selectedTeam.rightPlayer.greenCards.toString()
-        binding.statsYellowTwo.text = selectedTeam.rightPlayer.yellowCards.toString()
-        binding.statsRedTwo.text = selectedTeam.rightPlayer.redCards.toString()
-        binding.statsTimeCardedTwo.text = "${selectedTeam.rightPlayer.roundsCarded} points"
+        binding.statsPlayerOne.text = selectedTeam.playerOne.name
+        binding.statsScoredOne.text = selectedTeam.playerOne.goalsScored.toString()
+        binding.statsAcesOne.text = selectedTeam.playerOne.aces.toString()
+        binding.statsGreenOne.text = selectedTeam.playerOne.greenCards.toString()
+        binding.statsYellowOne.text = selectedTeam.playerOne.yellowCards.toString()
+        binding.statsRedOne.text = selectedTeam.playerOne.redCards.toString()
+        binding.statsTimeCardedOne.text = "${selectedTeam.playerOne.roundsCarded} points"
+        binding.statsPlayerTwo.text = selectedTeam.playerTwo.name
+        binding.statsScoredTwo.text = selectedTeam.playerTwo.goalsScored.toString()
+        binding.statsAcesTwo.text = selectedTeam.playerTwo.aces.toString()
+        binding.statsGreenTwo.text = selectedTeam.playerTwo.greenCards.toString()
+        binding.statsYellowTwo.text = selectedTeam.playerTwo.yellowCards.toString()
+        binding.statsRedTwo.text = selectedTeam.playerTwo.redCards.toString()
+        binding.statsTimeCardedTwo.text = "${selectedTeam.playerTwo.roundsCarded} points"
     }
 
     override fun onCreateView(

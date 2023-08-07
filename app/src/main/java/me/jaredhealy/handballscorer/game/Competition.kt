@@ -17,7 +17,7 @@ import java.lang.Exception
 
 
 object Competition {
-    private val client = OkHttpClient()
+    val client = OkHttpClient()
     private val callback = arrayListOf<() -> Unit>()
     fun getTeamsFromApi() {
         val request = Request.Builder().url("http://handball-tourney.zapto.org/api/teams").build()
@@ -61,13 +61,7 @@ object Competition {
                     if (string != "none") {
                         val map = JSONObject(string).toMap()
                         Log.i("api", map.toString())
-                        currentGame = Game.loadFromString(
-                            map["teamOne"] as String,
-                            map["teamTwo"] as String,
-                            map["game"] as String
-                        )
-                        currentGame!!.state =
-                            if (map["started"] as Boolean) Game.State.PLAYING else Game.State.BEFORE_GAME
+                        currentGame = Game.loadFromMap(map)
                         for (i in callback) {
                             val mainHandler = Handler(Looper.getMainLooper())
                             mainHandler.post(i)

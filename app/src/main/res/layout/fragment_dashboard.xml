@@ -191,7 +191,7 @@
 
     <TextView
             android:text="Server"
-            android:layout_width="129dp"
+            android:layout_width="130dp"
             android:layout_height="18dp"
             android:id="@+id/serverOne"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
@@ -203,7 +203,7 @@
 
     <TextView
             android:text="Server"
-            android:layout_width="129dp"
+            android:layout_width="130dp"
             android:layout_height="18dp"
             android:id="@+id/serverTwo"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
@@ -212,5 +212,15 @@
             android:textStyle="italic"
             app:layout_constraintBottom_toTopOf="@+id/teamNameTwo"
             app:layout_constraintStart_toStartOf="@+id/teamNameTwo" />
+
+    <ImageButton
+            android:src="@android:drawable/stat_notify_sync_noanim"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/swapButton"
+            app:layout_constraintTop_toTopOf="@+id/serverOne"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,7 +24,11 @@ class Player(var name: String) {
         }
     }
 
-    var isLeft = false
+    override operator fun equals(other: Any?): Boolean {
+        return this.name == (other as? Player)?.name
+    }
+
+    var isPlayerOne = false
     var aces = 0
         private set
     var redCarded: Boolean = false
@@ -91,6 +95,10 @@ class Player(var name: String) {
         roundsPlayed = 0
         roundsCarded = 0
         aces = 0
+    }
+
+    override fun hashCode(): Int {
+        return name.hashCode()
     }
 
 

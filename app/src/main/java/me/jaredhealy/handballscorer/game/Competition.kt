@@ -6,10 +6,8 @@ import android.util.Log
 import me.jaredhealy.handballscorer.toMap
 import okhttp3.Call
 import okhttp3.Callback
-import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.RequestBody
 import okhttp3.Response
 import org.json.JSONObject
 import java.io.IOException
@@ -18,6 +16,25 @@ import java.lang.Exception
 
 object Competition {
     val client = OkHttpClient()
+    var offlineMode = false
+    private var offlineGame = Game(
+        Team("Team One", "Player One", "Player Two"),
+        Team("Team Two", "Player One", "Player Two")
+    )
+
+
+    val currentGame: Game
+        get() {
+            return if (offlineMode || onlineGame == null) {
+                offlineGame
+            } else {
+                onlineGame!!
+            }
+        }
+
+    var onlineGame: Game? = null
+
+    val teams = arrayListOf<Team>()
     private val callback = arrayListOf<() -> Unit>()
     fun getTeamsFromApi() {
         val request = Request.Builder().url("http://handball-tourney.zapto.org/api/teams").build()
@@ -41,7 +58,7 @@ object Competition {
         callback.add(func)
     }
 
-    fun getCurrentGame(tries_remaining: Int = 20) {
+    fun getCurrentGame(triesRemaining: Int = 20) {
         val request =
             Request.Builder().url("http://handball-tourney.zapto.org/api/games/current").build()
 
@@ -51,33 +68,28 @@ object Competition {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                var string: String?
-                try {
-                    string = response.body()?.string()
+                val string: String? = try {
+                    response.body()?.string()
                 } catch (e: Exception) {
-                    string = null
+                    null
                 }
                 if (string != null) {
                     if (string != "none") {
                         val map = JSONObject(string).toMap()
                         Log.i("api", map.toString())
-                        currentGame = Game.loadFromMap(map)
+                        onlineGame = Game.loadFromMap(map)
                         for (i in callback) {
                             val mainHandler = Handler(Looper.getMainLooper())
                             mainHandler.post(i)
                         }
                     }
-                } else if (tries_remaining > 0) {
-                    getCurrentGame(tries_remaining - 1)
+                } else if (triesRemaining > 0) {
+                    getCurrentGame(triesRemaining - 1)
                 }
             }
         })
     }
 
-
-    var currentGame: Game? = null
-
-    val teams = arrayListOf<Team>()
 
     @Suppress("UNCHECKED_CAST")
     private fun processTeams(string: String) {
@@ -89,6 +101,13 @@ object Competition {
                 Team.fromMap(teamName, v as Map<String, *>)
             )
         }
+    }
+
+    fun resetOfflineGame() {
+        this.offlineGame = Game(
+            Team("Team One", "Player One", "Player Two"),
+            Team("Team Two", "Player One", "Player Two")
+        )
     }
 
 }

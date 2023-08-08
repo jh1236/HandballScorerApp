@@ -136,7 +136,7 @@ class HomeFragment : Fragment() {
             updateDisplays()
         }
         val root: View = binding.root
-        updateDisplays()
+        updateInternals()
         val mainHandler = Handler(Looper.getMainLooper())
         mainHandler.post(object : Runnable {
             override fun run() {
@@ -151,7 +151,7 @@ class HomeFragment : Fragment() {
 
     fun createLastN(string: String) {
         lastActions.clear()
-        lastActions.addAll(arrayOf("","","","","Game Started"))
+        lastActions.addAll(arrayOf("", "", "", "", "Game Started"))
         for (i in string.takeLast(10).chunked(2)) {
             val team = if (i[1].isUpperCase() xor swapVisual) teamOne else teamTwo
             val player = if (i[1].uppercase() == "L") team.leftPlayer else team.rightPlayer
@@ -195,10 +195,40 @@ class HomeFragment : Fragment() {
     fun updateInternals(attempts: Int = 10) {
         val request =
             Request.Builder().url("http://handball-tourney.zapto.org/api/games/display").build()
-
+        if (Competition.onlineGame == null || Competition.offlineMode) {
+            teamOne = Competition.currentGame.teamOne.asDisplayTeam()
+            teamTwo = Competition.currentGame.teamTwo.asDisplayTeam()
+            if (swapVisual) {
+                val temp = teamOne
+                teamOne = teamTwo
+                teamTwo = temp
+            }
+            serverName = Competition.currentGame.serving.server.name
+            firstServing = Competition.currentGame.serving.firstTeam xor swapVisual
+            rounds = Competition.currentGame.roundCount
+            val mainHandler = Handler(Looper.getMainLooper())
+            mainHandler.post {
+                updateDisplays()
+            }
+            return
+        }
         Competition.client.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 Log.i("api", e.stackTraceToString())
+                teamOne = Competition.currentGame.teamOne.asDisplayTeam()
+                teamTwo = Competition.currentGame.teamTwo.asDisplayTeam()
+                if (swapVisual) {
+                    val temp = teamOne
+                    teamOne = teamTwo
+                    teamTwo = temp
+                }
+                serverName = Competition.currentGame.serving.server.name
+                firstServing = Competition.currentGame.serving.firstTeam xor swapVisual
+                rounds = Competition.currentGame.roundCount
+                val mainHandler = Handler(Looper.getMainLooper())
+                mainHandler.post {
+                    updateDisplays()
+                }
             }
 
             override fun onResponse(call: Call, response: Response) {
@@ -252,8 +282,8 @@ class HomeFragment : Fragment() {
                         rounds = map["rounds"] as Int
                         firstServing = (map["firstTeamServing"] as Boolean) xor swapVisual
                         serverName = map["serverName"] as String
-                        val mainHandler = Handler(Looper.getMainLooper())
                         createLastN(map["game"] as String)
+                        val mainHandler = Handler(Looper.getMainLooper())
                         mainHandler.post {
                             updateDisplays()
                         }
@@ -261,6 +291,21 @@ class HomeFragment : Fragment() {
                 } else {
                     if (attempts > 0) {
                         updateInternals(attempts - 1)
+                    } else {
+                        teamOne = Competition.currentGame.teamOne.asDisplayTeam()
+                        teamTwo = Competition.currentGame.teamTwo.asDisplayTeam()
+                        if (swapVisual) {
+                            val temp = teamOne
+                            teamOne = teamTwo
+                            teamTwo = temp
+                        }
+                        serverName = Competition.currentGame.serving.server.name
+                        firstServing = Competition.currentGame.serving.firstTeam xor swapVisual
+                        rounds = Competition.currentGame.roundCount
+                        val mainHandler = Handler(Looper.getMainLooper())
+                        mainHandler.post {
+                            updateDisplays()
+                        }
                     }
                 }
             }

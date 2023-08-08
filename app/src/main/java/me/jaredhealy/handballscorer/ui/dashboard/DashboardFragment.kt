@@ -43,7 +43,7 @@ class DashboardFragment : Fragment() {
     private val ENABLED_TEXT_COLOR
         get() = ResourcesCompat.getColor(resources, R.color.white, null)
 
-    var visualSwap = false
+    private var visualSwap = false
     private val teamOne: Team
         get() = if (!visualSwap) game.teamOne else game.teamTwo
     private val teamTwo: Team
@@ -51,12 +51,7 @@ class DashboardFragment : Fragment() {
 
     val game: Game
         get() {
-            return if (Competition.currentGame != null) {
-                Competition.currentGame!!
-            } else {
-                exit()
-                Game.dummyGame()
-            }
+            return Competition.currentGame
         }
 
     private fun exit() {
@@ -75,10 +70,10 @@ class DashboardFragment : Fragment() {
             ), -1
         ) { _, which ->
             wasPlayerOne = which
-        }.setPositiveButton("Done") { dialog, id ->
+        }.setPositiveButton("Done") { dialog, _ ->
             onExit(wasPlayerOne)
             dialog.dismiss()
-        }.setNegativeButton("Cancel") { dialog, id ->
+        }.setNegativeButton("Cancel") { dialog, _ ->
             dialog.dismiss()
         }
 
@@ -109,7 +104,7 @@ class DashboardFragment : Fragment() {
         val builder = AlertDialog.Builder(activity)
         builder.setCustomTitle(textView).setPositiveButton("Done") { dialog, _ ->
             thread.interrupt()
-            Competition.currentGame!!.endTimeout()
+            Competition.currentGame.endTimeout()
             updateDisplays()
             dialog.cancel()
         }
@@ -213,7 +208,7 @@ class DashboardFragment : Fragment() {
     ): View {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         visualSwap = false
-        if (Competition.currentGame?.state != Game.State.PLAYING) {
+        if (Competition.currentGame.state != Game.State.PLAYING) {
             Competition.getTeamsFromApi()
             exit()
             visualSwap = false
@@ -318,7 +313,7 @@ class DashboardFragment : Fragment() {
                         teamOne.yellowCard(it == 0, input.values[0].toInt())
                         updateDisplays()
                         dialog.dismiss()
-                    }.setNegativeButton("Cancel") { dialog, id ->
+                    }.setNegativeButton("Cancel") { dialog, _ ->
                         dialog.dismiss()
                     }.setView(input)
                     builder.create().show()
@@ -338,11 +333,11 @@ class DashboardFragment : Fragment() {
                     input.setValues(3.0f)
                     input.valueFrom = 1.0f
                     input.valueTo = 10.0f
-                    builder.setTitle("How many rounds").setPositiveButton("Done") { dialog, id ->
+                    builder.setTitle("How many rounds").setPositiveButton("Done") { dialog, _ ->
                         teamTwo.yellowCard(it == 0, input.values[0].toInt())
                         updateDisplays()
                         dialog.dismiss()
-                    }.setNegativeButton("Cancel") { dialog, id ->
+                    }.setNegativeButton("Cancel") { dialog, _ ->
                         dialog.dismiss()
                     }.setView(input)
                     builder.create().show()

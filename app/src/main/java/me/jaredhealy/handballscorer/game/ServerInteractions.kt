@@ -16,7 +16,7 @@ object ServerInteractions {
     private val client = OkHttpClient()
 
     private fun post(method: String, content: Map<Any, Any?>, recall: Boolean = true) {
-        if (!Game.recordStats) return
+        if (!Game.recordStats || Competition.offlineMode) return
         val body = RequestBody.create(
             MediaType.parse("application/json"), JSONObject(content).toString()
         )

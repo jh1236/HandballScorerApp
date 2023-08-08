@@ -1,6 +1,7 @@
 package me.jaredhealy.handballscorer.game
 
 import android.util.Log
+import me.jaredhealy.handballscorer.ui.home.DisplayTeam
 import kotlin.math.max
 
 @Suppress("UNCHECKED_CAST")
@@ -232,6 +233,18 @@ class Team(var teamName: String, val playerOne: Player, val playerTwo: Player) {
 
     override fun hashCode(): Int {
         return teamName.hashCode()
+    }
+
+    fun asDisplayTeam(): DisplayTeam {
+        return DisplayTeam(
+            teamName,
+            playerOne.name,
+            playerTwo.name,
+            score,
+            cardCount,
+            cardDuration,
+            greenCarded
+        )
     }
 
 }

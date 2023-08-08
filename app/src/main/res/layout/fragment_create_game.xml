@@ -38,17 +38,17 @@
             android:layout_marginTop="28dp" />
 
     <TextView
-            android:text="Next Match"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:textAlignment="center"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="156dp" />
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="156dp"
+        android:text="Next Match"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
             android:text="TextView"
@@ -156,5 +156,17 @@
             app:layout_constraintStart_toStartOf="@+id/radioGroup2"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintBottom_toTopOf="@+id/radioGroup2" />
+
+    <Switch
+        android:id="@+id/offlineMode"
+        android:layout_width="146dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="28dp"
+        android:text="Offline Mode"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="@+id/textView2"
+        app:layout_constraintStart_toStartOf="@+id/textView2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

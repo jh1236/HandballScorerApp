@@ -10,8 +10,10 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.snackbar.Snackbar
 import me.jaredhealy.handballscorer.databinding.FragmentNotificationsBinding
 import me.jaredhealy.handballscorer.game.Competition
+import me.jaredhealy.handballscorer.game.Team
 
 @SuppressLint("SetTextI18n")
 class NotificationsFragment : Fragment(), AdapterView.OnItemSelectedListener {
@@ -22,7 +24,7 @@ class NotificationsFragment : Fragment(), AdapterView.OnItemSelectedListener {
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
-    private var selectedTeam = Competition.teams[0]
+    private lateinit var selectedTeam: Team
 
 
     private fun update() {
@@ -58,6 +60,11 @@ class NotificationsFragment : Fragment(), AdapterView.OnItemSelectedListener {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentNotificationsBinding.inflate(inflater, container, false)
+        if (Competition.offlineMode || Competition.onlineGame == null || Competition.teams.isEmpty()) {
+            findNavController().navigate(me.jaredhealy.handballscorer.R.id.navigation_home)
+            return binding.root
+        }
+        selectedTeam = Competition.teams[0]
         val list = arrayListOf<String>()
         list.addAll(Competition.teams.map { it.toString() })
         val root: View = binding.root

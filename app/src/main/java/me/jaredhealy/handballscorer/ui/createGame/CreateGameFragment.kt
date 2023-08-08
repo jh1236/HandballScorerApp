@@ -36,10 +36,14 @@ class CreateGameFragment : Fragment() {
             binding.serveIndicatorOne.visibility = View.INVISIBLE
             binding.serveIndicatorTwo.visibility = View.VISIBLE
         }
-        binding.leftPlayerOne.text = Competition.currentGame!!.teamOne.playerOne.name
-        binding.rightPlayerOne.text = Competition.currentGame!!.teamOne.playerTwo.name
-        binding.leftPlayerTwo.text = Competition.currentGame!!.teamTwo.playerOne.name
-        binding.rightPlayerTwo.text = Competition.currentGame!!.teamTwo.playerTwo.name
+        if (Competition.onlineGame == null) {
+            binding.offlineMode.isChecked = true
+            binding.offlineMode.isEnabled = false
+        }
+        binding.leftPlayerOne.text = Competition.currentGame.teamOne.playerOne.name
+        binding.rightPlayerOne.text = Competition.currentGame.teamOne.playerTwo.name
+        binding.leftPlayerTwo.text = Competition.currentGame.teamTwo.playerOne.name
+        binding.rightPlayerTwo.text = Competition.currentGame.teamTwo.playerTwo.name
     }
 
     override fun onCreateView(
@@ -51,25 +55,30 @@ class CreateGameFragment : Fragment() {
         _binding = FragmentCreateGameBinding.inflate(inflater, container, false)
         updateDisplay()
 
-        if (Competition.currentGame == null) {
-            Competition.getTeamsFromApi()
-            findNavController().navigate(R.id.navigation_home)
-            return binding.root
-        }
-        val state = (Competition.currentGame?.state ?: Game.State.BEFORE_GAME)
+        val state = Competition.currentGame.state
         if (state == Game.State.PLAYING || state == Game.State.TIMEOUT) {
             showControlPanel()
             return binding.root
+        } else if (state == Game.State.GAME_WON && (Competition.onlineGame == null || Competition.offlineMode)) {
+            Competition.resetOfflineGame()
         }
-        binding.nextTeamOne.text = Competition.currentGame!!.teamOne.teamName
-        binding.nextTeamTwo.text = Competition.currentGame!!.teamTwo.teamName
+        binding.nextTeamOne.text = Competition.currentGame.teamOne.teamName
+        binding.nextTeamTwo.text = Competition.currentGame.teamTwo.teamName
         binding.swapService.setOnClickListener {
             swappedService = !swappedService
             updateDisplay()
         }
         binding.startGame.setOnClickListener {
-            Competition.currentGame?.startGame(swappedService, binding.rightPlayerOne.isChecked, binding.rightPlayerTwo.isChecked)
+            Competition.currentGame.startGame(
+                swappedService,
+                binding.rightPlayerOne.isChecked,
+                binding.rightPlayerTwo.isChecked
+            )
             showControlPanel()
+        }
+        binding.offlineMode.setOnCheckedChangeListener { _, value ->
+            Competition.offlineMode = value
+            updateDisplay()
         }
         return binding.root
     }

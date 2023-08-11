@@ -10,7 +10,7 @@
             android:text="Left Player:"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView3"
+            android:id="@+id/playersTwo"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintStart_toStartOf="@+id/radioGroup3"
             app:layout_constraintEnd_toEndOf="@+id/radioGroup3"
@@ -38,17 +38,17 @@
             android:layout_marginTop="28dp" />
 
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="156dp"
-        android:text="Next Match"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="156dp"
+            android:text="Next Match"
+            android:textAlignment="center"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
             android:text="TextView"
@@ -122,6 +122,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/rightPlayerTwo" />
+
     </RadioGroup>
 
     <RadioGroup
@@ -145,28 +146,74 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/rightPlayerOne" />
+
     </RadioGroup>
 
     <TextView
             android:text="Left Player:"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView"
+            android:id="@+id/playersOne"
             app:layout_constraintEnd_toEndOf="@+id/radioGroup2"
             app:layout_constraintStart_toStartOf="@+id/radioGroup2"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             app:layout_constraintBottom_toTopOf="@+id/radioGroup2" />
 
     <Switch
-        android:id="@+id/offlineMode"
-        android:layout_width="146dp"
-        android:layout_height="48dp"
-        android:layout_marginBottom="28dp"
-        android:text="Offline Mode"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textStyle="italic"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
-        app:layout_constraintEnd_toEndOf="@+id/textView2"
-        app:layout_constraintStart_toStartOf="@+id/textView2" />
+            android:id="@+id/offlineMode"
+            android:layout_width="146dp"
+            android:layout_height="48dp"
+            android:layout_marginBottom="28dp"
+            android:text="Offline Mode"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toTopOf="@+id/textView2"
+            app:layout_constraintEnd_toEndOf="@+id/textView2"
+            app:layout_constraintStart_toStartOf="@+id/textView2" />
+
+    <EditText
+            android:layout_width="114dp"
+            android:layout_height="48dp"
+            android:inputType="text"
+            android:text="Left Player"
+            android:ems="10"
+            android:id="@+id/leftPlayerNameOne"
+            app:layout_constraintTop_toTopOf="@+id/radioGroup2"
+            app:layout_constraintStart_toStartOf="@+id/radioGroup2"
+            android:visibility="invisible" />
+
+    <EditText
+            android:layout_width="114dp"
+            android:layout_height="48dp"
+            android:inputType="text"
+            android:text="Right Player"
+            android:ems="10"
+            android:id="@+id/rightPlayerNameOne"
+            app:layout_constraintStart_toStartOf="@+id/radioGroup2"
+            app:layout_constraintTop_toBottomOf="@+id/leftPlayerNameOne"
+            android:visibility="invisible" />
+
+    <EditText
+            android:layout_width="114dp"
+            android:layout_height="48dp"
+            android:inputType="text"
+            android:text="Left Player"
+            android:ems="10"
+            android:id="@+id/leftPlayerNameTwo"
+            app:layout_constraintTop_toBottomOf="@+id/playersTwo"
+            app:layout_constraintStart_toStartOf="@+id/radioGroup3"
+            android:visibility="invisible" />
+
+    <EditText
+            android:layout_width="114dp"
+            android:layout_height="48dp"
+            android:inputType="text"
+            android:text="Right Player"
+            android:ems="10"
+            android:id="@+id/rightPlayerNameTwo"
+            app:layout_constraintStart_toStartOf="@+id/radioGroup3"
+            android:layout_marginTop="1dp"
+            app:layout_constraintTop_toBottomOf="@+id/leftPlayerNameTwo"
+            android:visibility="invisible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

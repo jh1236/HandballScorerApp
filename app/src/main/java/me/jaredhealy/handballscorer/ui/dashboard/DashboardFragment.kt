@@ -3,6 +3,8 @@ package me.jaredhealy.handballscorer.ui.dashboard
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +12,7 @@ import android.view.ViewGroup.OnHierarchyChangeListener
 import android.widget.ListView
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.os.postDelayed
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.slider.RangeSlider
@@ -17,6 +20,7 @@ import me.jaredhealy.handballscorer.R
 import me.jaredhealy.handballscorer.databinding.FragmentDashboardBinding
 import me.jaredhealy.handballscorer.game.Competition
 import me.jaredhealy.handballscorer.game.Game
+import me.jaredhealy.handballscorer.game.ServerInteractions
 import me.jaredhealy.handballscorer.game.Team
 import kotlin.math.max
 
@@ -216,9 +220,22 @@ class DashboardFragment : Fragment() {
         }
         updateDisplays()
         val root: View = binding.root
-        binding.swapButton.setOnClickListener{
+        binding.swapButton.setOnClickListener {
             visualSwap = !visualSwap
             updateDisplays()
+        }
+        binding.undoButton.setOnClickListener {
+            val builder = AlertDialog.Builder(activity)
+            builder.setTitle("Are you sure you want to undo?").setPositiveButton("Yes") { dialog, _ ->
+                game.undo()
+                Competition.getTeamsFromApi()
+                val mainHandler = Handler(Looper.getMainLooper())
+                mainHandler.postDelayed(200) {
+                    updateDisplays()
+                }
+            }.setNegativeButton("No") { dialog, _ ->
+                dialog.dismiss()
+            }.show()
         }
         binding.scoreOneBtn.setOnClickListener {
             if (game.state == Game.State.PLAYING) {

@@ -4,13 +4,22 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.createGame.CreateGameFragment"
-        android:backgroundTint="@color/red_card">
+        tools:context=".ui.createGame.CreateGameFragment">
+
+    <ImageButton
+            android:src="@android:drawable/ic_menu_revert"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/undoButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/timeOutOneBtn"
+            android:layout_marginTop="4dp" />
 
     <Button
             android:text="Timeout Team two"
             android:layout_width="130dp"
-            android:layout_height="100dp"
+            android:layout_height="90dp"
             android:id="@+id/timeOutTwoBtn"
             android:backgroundTint="@color/purple_500"
             app:layout_constraintEnd_toEndOf="parent"
@@ -20,7 +29,7 @@
     <Button
             android:text="Timeout Team One"
             android:layout_width="130dp"
-            android:layout_height="100dp"
+            android:layout_height="90dp"
             android:id="@+id/timeOutOneBtn"
             android:backgroundTint="@color/purple_500"
             android:layout_marginTop="4dp"
@@ -51,7 +60,7 @@
     <Button
             android:text="Red Card Team one"
             android:layout_width="130dp"
-            android:layout_height="100dp"
+            android:layout_height="90dp"
             android:id="@+id/redOneBtn"
             app:layout_constraintTop_toBottomOf="@+id/yellowOneBtn"
             app:layout_constraintStart_toStartOf="parent"
@@ -62,7 +71,7 @@
     <Button
             android:text="Red Card Team two"
             android:layout_width="130dp"
-            android:layout_height="100dp"
+            android:layout_height="90dp"
             android:id="@+id/redTwoBtn"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="48dp"
@@ -72,7 +81,7 @@
     <Button
             android:text="Yellow Card Team two"
             android:layout_width="130dp"
-            android:layout_height="100dp"
+            android:layout_height="90dp"
             android:id="@+id/yellowTwoBtn"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="48dp"
@@ -82,7 +91,7 @@
     <Button
             android:text="Yellow Card Team one"
             android:layout_width="130dp"
-            android:layout_height="100dp"
+            android:layout_height="90dp"
             android:id="@+id/yellowOneBtn"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="48dp"
@@ -93,7 +102,7 @@
     <Button
             android:text="Green Card Team two"
             android:layout_width="130dp"
-            android:layout_height="100dp"
+            android:layout_height="90dp"
             android:id="@+id/greenTwoBtn"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="48dp"
@@ -103,7 +112,7 @@
     <Button
             android:text="Green Card Team one"
             android:layout_width="130dp"
-            android:layout_height="100dp"
+            android:layout_height="90dp"
             android:id="@+id/greenOneBtn"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="48dp"
@@ -114,7 +123,7 @@
     <Button
             android:text="Score Team one"
             android:layout_width="130dp"
-            android:layout_height="100dp"
+            android:layout_height="90dp"
             android:id="@+id/scoreOneBtn"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="48dp"
@@ -124,7 +133,7 @@
     <Button
             android:text="Score Team two"
             android:layout_width="130dp"
-            android:layout_height="100dp"
+            android:layout_height="90dp"
             android:id="@+id/scoreTwoBtn"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="48dp"

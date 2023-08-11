@@ -8,10 +8,9 @@ class Game(var teamOne: Team, var teamTwo: Team, private val goalsToWin: Int = 1
 
         var recordStats = true
 
-        fun loadFromMap(map: Map<String, *>): Game? {
-            if (Competition.teams.isEmpty()) return null
-            val teamOne = Competition.teams.first { it.teamName == map["teamOne"] }
-            val teamTwo = Competition.teams.first { it.teamName == map["teamTwo"] }
+        fun loadFromMap(map: Map<String, *>): Game {
+            val teamOne = (Competition.teams.firstOrNull { it.teamName == map["teamOne"] }) ?: Team(map["teamOne"] as String, "Player 1", "Player 2")
+            val teamTwo = Competition.teams.firstOrNull { it.teamName == map["teamTwo"] } ?: Team(map["teamTwo"] as String, "Player 1", "Player 2")
             recordStats = false
             val game = Game(teamOne, teamTwo)
             if (!(map["started"] as Boolean)) {
@@ -68,17 +67,9 @@ class Game(var teamOne: Team, var teamTwo: Team, private val goalsToWin: Int = 1
             recordStats = true
             return game
         }
-
-        fun dummyGame(): Game {
-            return Game(
-                Team("Team One", "Player One", "Player Two"),
-                Team("Team Two", "Player One", "Player Two")
-            )
-        }
     }
 
-    var serveLeft = true
-        private set
+    var gameString = ""
     private var startTime: Long = -1
     private var swapped: Boolean = false
 
@@ -96,8 +87,6 @@ class Game(var teamOne: Team, var teamTwo: Team, private val goalsToWin: Int = 1
     }
 
 
-    var serviceCounter = 0
-
     enum class State {
         PLAYING, BEFORE_GAME, GAME_WON, TIMEOUT
     }
@@ -114,7 +103,7 @@ class Game(var teamOne: Team, var teamTwo: Team, private val goalsToWin: Int = 1
             teamTwo.serving = true
             teamOne.serving = false
             this.serving = teamTwo
-        } else{
+        } else {
             teamOne.serving = true
             teamTwo.serving = false
             this.serving = teamOne
@@ -132,6 +121,27 @@ class Game(var teamOne: Team, var teamTwo: Team, private val goalsToWin: Int = 1
         state = State.PLAYING
     }
 
+    fun undo() {
+        if (Competition.onlineGame != null && !Competition.offlineMode) {
+            ServerInteractions.undo()
+        } else {
+            Competition.offlineGame = loadFromMap(
+                mapOf(
+                    "started" to true,
+                    "teamOne" to teamOne.teamName,
+                    "teamTwo" to teamTwo.teamName,
+                    "swapped" to swapped,
+                    "swapTeamOne" to teamOne.swapped,
+                    "swapTeamTwo" to teamTwo.swapped,
+                    "game" to gameString.substring(0, gameString.length - 2)
+                )
+            )
+            Competition.offlineGame.teamOne.playerOne.name = teamOne.playerOne.name
+            Competition.offlineGame.teamOne.playerTwo.name = teamOne.playerTwo.name
+            Competition.offlineGame.teamTwo.playerOne.name = teamTwo.playerOne.name
+            Competition.offlineGame.teamTwo.playerTwo.name = teamTwo.playerTwo.name
+        }
+    }
 
     internal fun nextPoint() {
         roundCount++

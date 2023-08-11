@@ -28,6 +28,14 @@ class Team(var teamName: String, val playerOne: Player, val playerTwo: Player) {
         playerTwo.isPlayerOne = false
     }
 
+    private fun addToGameString(c: String) {
+        if (this.firstTeam) {
+            game.gameString += c.uppercase()
+        } else {
+            game.gameString += c.lowercase()
+        }
+    }
+
     override operator fun equals(other: Any?): Boolean {
         return this.teamName == (other as? Team)?.teamName
     }
@@ -36,6 +44,7 @@ class Team(var teamName: String, val playerOne: Player, val playerTwo: Player) {
         teamName, Player(leftPlayer), Player(rightPlayer)
     )
 
+    var swapped = false
     var timeOutsRemaining = 2
         private set
 
@@ -83,6 +92,7 @@ class Team(var teamName: String, val playerOne: Player, val playerTwo: Player) {
     var server: Player = playerOne
 
     fun start(swapPlayers: Boolean) {
+        swapped = swapPlayers
         if (Game.recordStats) {
             played++
         }
@@ -105,6 +115,7 @@ class Team(var teamName: String, val playerOne: Player, val playerTwo: Player) {
     fun callTimeout() {
         timeOutsRemaining--
         Log.i("timeouts", timeOutsRemaining.toString())
+        addToGameString("TT")
         if (Game.recordStats) {
             ServerInteractions.timeout(this)
         }
@@ -123,10 +134,20 @@ class Team(var teamName: String, val playerOne: Player, val playerTwo: Player) {
         score++
         val player = when (firstPlayer) {
             true -> {
+                if (ace) {
+                    addToGameString("AL")
+                } else {
+                    addToGameString("SL")
+                }
                 this.playerOne
             }
 
             false -> {
+                if (ace) {
+                    addToGameString("AR")
+                } else {
+                    addToGameString("SR")
+                }
                 this.playerTwo
             }
 
@@ -162,8 +183,10 @@ class Team(var teamName: String, val playerOne: Player, val playerTwo: Player) {
             ServerInteractions.greenCard(this, firstPlayer)
         }
         if (firstPlayer) {
+            addToGameString("GL")
             this.playerOne.greenCard()
         } else {
+            addToGameString("GR")
             this.playerTwo.greenCard()
         }
     }
@@ -173,15 +196,24 @@ class Team(var teamName: String, val playerOne: Player, val playerTwo: Player) {
         if (Game.recordStats) {
             ServerInteractions.yellowCard(this, firstPlayer, time)
         }
-        Log.i("game", "$time round card")
         if (firstPlayer) {
             this.playerOne.yellowCard()
+            if (time == 3) {
+                addToGameString("YL")
+            } else {
+                addToGameString("${time}L")
+            }
             if (cardCountPlayerOne >= 0) {
                 cardCountPlayerOne += time
                 cardDurationPlayerOne = cardCountPlayerOne
             }
         } else {
             this.playerTwo.yellowCard()
+            if (time == 3) {
+                addToGameString("YR")
+            } else {
+                addToGameString("${time}R")
+            }
             if (cardCountPlayerTwo >= 0) {
                 cardCountPlayerTwo += time
                 cardDurationPlayerTwo = cardCountPlayerTwo
@@ -200,9 +232,11 @@ class Team(var teamName: String, val playerOne: Player, val playerTwo: Player) {
         }
         if (firstPlayer) {
             this.playerOne.redCard()
+            addToGameString("VL")
             cardCountPlayerOne = -1
         } else {
             this.playerTwo.redCard()
+            addToGameString("VR")
             cardCountPlayerTwo = -1
         }
         while (cardCountPlayerOne != 0 && cardCountPlayerTwo != 0 && !game.isOver()) {

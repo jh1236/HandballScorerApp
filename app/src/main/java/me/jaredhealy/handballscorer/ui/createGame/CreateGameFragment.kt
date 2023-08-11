@@ -28,6 +28,32 @@ class CreateGameFragment : Fragment() {
         findNavController()
     }
 
+    private fun toOfflineMode() {
+        binding.playersOne.text = "Players:"
+        binding.playersTwo.text = "Players:"
+        binding.leftPlayerOne.visibility = View.INVISIBLE
+        binding.rightPlayerOne.visibility = View.INVISIBLE
+        binding.leftPlayerTwo.visibility = View.INVISIBLE
+        binding.rightPlayerTwo.visibility = View.INVISIBLE
+        binding.leftPlayerNameOne.visibility = View.VISIBLE
+        binding.rightPlayerNameOne.visibility = View.VISIBLE
+        binding.leftPlayerNameTwo.visibility = View.VISIBLE
+        binding.rightPlayerNameTwo.visibility = View.VISIBLE
+    }
+
+    private fun toOnlineMode() {
+        binding.playersOne.text = "Left Player:"
+        binding.playersTwo.text = "Left Player:"
+        binding.leftPlayerOne.visibility = View.VISIBLE
+        binding.rightPlayerOne.visibility = View.VISIBLE
+        binding.leftPlayerTwo.visibility = View.VISIBLE
+        binding.rightPlayerTwo.visibility = View.VISIBLE
+        binding.leftPlayerNameOne.visibility = View.INVISIBLE
+        binding.rightPlayerNameOne.visibility = View.INVISIBLE
+        binding.leftPlayerNameTwo.visibility = View.INVISIBLE
+        binding.rightPlayerNameTwo.visibility = View.INVISIBLE
+    }
+
     private fun updateDisplay() {
         if (!swappedService) {
             binding.serveIndicatorOne.visibility = View.VISIBLE
@@ -39,6 +65,7 @@ class CreateGameFragment : Fragment() {
         if (Competition.onlineGame == null) {
             binding.offlineMode.isChecked = true
             binding.offlineMode.isEnabled = false
+            toOfflineMode()
         }
         binding.leftPlayerOne.text = Competition.currentGame.teamOne.playerOne.name
         binding.rightPlayerOne.text = Competition.currentGame.teamOne.playerTwo.name
@@ -53,6 +80,7 @@ class CreateGameFragment : Fragment() {
     ): View {
         super.onCreate(savedInstanceState)
         _binding = FragmentCreateGameBinding.inflate(inflater, container, false)
+        toOnlineMode()
         updateDisplay()
 
         val state = Competition.currentGame.state
@@ -69,15 +97,30 @@ class CreateGameFragment : Fragment() {
             updateDisplay()
         }
         binding.startGame.setOnClickListener {
+            if (Competition.offlineMode) {
+                Competition.currentGame.teamOne.playerOne.name =
+                    binding.leftPlayerNameOne.text.toString()
+                Competition.currentGame.teamOne.playerTwo.name =
+                    binding.rightPlayerNameOne.text.toString()
+                Competition.currentGame.teamTwo.playerOne.name =
+                    binding.leftPlayerNameTwo.text.toString()
+                Competition.currentGame.teamTwo.playerTwo.name =
+                    binding.rightPlayerNameTwo.text.toString()
+            }
             Competition.currentGame.startGame(
                 swappedService,
-                binding.rightPlayerOne.isChecked,
-                binding.rightPlayerTwo.isChecked
+                binding.rightPlayerOne.isChecked && !Competition.offlineMode,
+                binding.rightPlayerTwo.isChecked && !Competition.offlineMode
             )
             showControlPanel()
         }
         binding.offlineMode.setOnCheckedChangeListener { _, value ->
             Competition.offlineMode = value
+            if (value) {
+                toOfflineMode()
+            } else {
+                toOnlineMode()
+            }
             updateDisplay()
         }
         return binding.root

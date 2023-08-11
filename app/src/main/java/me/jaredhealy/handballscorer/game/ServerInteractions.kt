@@ -104,4 +104,11 @@ object ServerInteractions {
             ), false
         )
     }
+
+    fun undo() {
+        post(
+            "games/update/undo",
+            mapOf()
+        )
+    }
 }

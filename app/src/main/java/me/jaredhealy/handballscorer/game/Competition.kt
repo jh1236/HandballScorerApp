@@ -17,7 +17,7 @@ import java.lang.Exception
 object Competition {
     val client = OkHttpClient()
     var offlineMode = false
-    private var offlineGame = Game(
+    var offlineGame = Game(
         Team("Team One", "Player One", "Player Two"),
         Team("Team Two", "Player One", "Player Two")
     )

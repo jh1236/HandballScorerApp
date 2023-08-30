@@ -44,6 +44,8 @@ class Team(var teamName: String, val playerOne: Player, val playerTwo: Player) {
         teamName, Player(leftPlayer), Player(rightPlayer)
     )
 
+    val niceName: String
+        get() = teamName.replace(" ", "_").lowercase()
     var swapped = false
     var timeOutsRemaining = 2
         private set

@@ -145,7 +145,7 @@
             android:layout_height="0dp"
             android:id="@+id/teamNameOne"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="112dp"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="48dp"
             android:textAlignment="center" />
@@ -168,8 +168,7 @@
             android:textSize="34sp"
             tools:text="99"
             android:textAlignment="center"
-            app:layout_constraintTop_toBottomOf="@+id/teamNameOne"
-            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@+id/cardsTeamOne"
             app:layout_constraintStart_toStartOf="@+id/teamNameOne"
             app:layout_constraintEnd_toEndOf="@+id/teamNameOne" />
 
@@ -181,8 +180,7 @@
             android:textSize="34sp"
             tools:text="99"
             android:textAlignment="center"
-            app:layout_constraintTop_toBottomOf="@+id/teamNameTwo"
-            android:layout_marginTop="20dp"
+            app:layout_constraintTop_toBottomOf="@+id/cardsTeamTwo"
             app:layout_constraintEnd_toEndOf="@+id/teamNameTwo"
             app:layout_constraintStart_toStartOf="@+id/teamNameTwo" />
 
@@ -231,5 +229,26 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            tools:src="@tools:sample/avatars[6]"
+            android:id="@+id/team_one_img"
+            app:layout_constraintStart_toStartOf="@+id/serverOne"
+            app:layout_constraintEnd_toEndOf="@+id/serverOne"
+            app:layout_constraintBottom_toTopOf="@+id/serverOne"
+            android:layout_marginBottom="8dp"
+            app:srcCompat="@mipmap/ic_launcher_round" />
+
+    <ImageView
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            tools:src="@tools:sample/avatars[3]"
+            android:id="@+id/team_two_img"
+            app:layout_constraintBottom_toBottomOf="@+id/team_one_img"
+            app:layout_constraintStart_toStartOf="@+id/serverTwo"
+            app:layout_constraintEnd_toEndOf="@+id/serverTwo"
+            app:srcCompat="@android:mipmap/sym_def_app_icon" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

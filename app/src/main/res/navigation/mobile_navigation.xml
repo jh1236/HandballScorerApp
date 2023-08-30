@@ -6,6 +6,10 @@
         app:startDestination="@+id/navigation_home">
 
     <fragment
+            android:id="@+id/navigation_end_game"
+            android:name="me.jaredhealy.handballscorer.ui.endGame.EndGameFragment"
+            android:label="@string/title_notifications" />
+    <fragment
             android:id="@+id/navigation_dashboard"
             android:name="me.jaredhealy.handballscorer.ui.dashboard.DashboardFragment"
             android:label="@string/title_dashboard" />

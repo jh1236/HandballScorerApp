@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.squareup.picasso.Picasso
 import me.jaredhealy.handballscorer.R
 import me.jaredhealy.handballscorer.databinding.FragmentCreateGameBinding
 import me.jaredhealy.handballscorer.game.Competition
@@ -33,12 +34,18 @@ class CreateGameFragment : Fragment() {
         binding.playersTwo.text = "Players:"
         binding.leftPlayerOne.visibility = View.INVISIBLE
         binding.rightPlayerOne.visibility = View.INVISIBLE
+        binding.teamOneCreateImg.visibility = View.INVISIBLE
+        binding.teamTwoCreateImg.visibility = View.INVISIBLE
         binding.leftPlayerTwo.visibility = View.INVISIBLE
         binding.rightPlayerTwo.visibility = View.INVISIBLE
         binding.leftPlayerNameOne.visibility = View.VISIBLE
         binding.rightPlayerNameOne.visibility = View.VISIBLE
         binding.leftPlayerNameTwo.visibility = View.VISIBLE
         binding.rightPlayerNameTwo.visibility = View.VISIBLE
+        binding.leftPlayerOne.isChecked = true
+        binding.rightPlayerOne.isChecked = false
+        binding.leftPlayerTwo.isChecked = true
+        binding.rightPlayerTwo.isChecked = false
     }
 
     private fun toOnlineMode() {
@@ -48,6 +55,8 @@ class CreateGameFragment : Fragment() {
         binding.rightPlayerOne.visibility = View.VISIBLE
         binding.leftPlayerTwo.visibility = View.VISIBLE
         binding.rightPlayerTwo.visibility = View.VISIBLE
+        binding.teamOneCreateImg.visibility = View.VISIBLE
+        binding.teamTwoCreateImg.visibility = View.VISIBLE
         binding.leftPlayerNameOne.visibility = View.INVISIBLE
         binding.rightPlayerNameOne.visibility = View.INVISIBLE
         binding.leftPlayerNameTwo.visibility = View.INVISIBLE
@@ -79,10 +88,18 @@ class CreateGameFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         super.onCreate(savedInstanceState)
+
         _binding = FragmentCreateGameBinding.inflate(inflater, container, false)
         toOnlineMode()
         updateDisplay()
-
+        if (!Competition.offlineMode && Competition.onlineGame != null) {
+            Picasso.get()
+                .load("http://handball-tourney.zapto.org/api/teams/image?name=${Competition.currentGame.teamOne.niceName}")
+                .into(binding.teamOneCreateImg)
+            Picasso.get()
+                .load("http://handball-tourney.zapto.org/api/teams/image?name=${Competition.currentGame.teamTwo.niceName}")
+                .into(binding.teamTwoCreateImg)
+        }
         val state = Competition.currentGame.state
         if (state == Game.State.PLAYING || state == Game.State.TIMEOUT) {
             showControlPanel()
@@ -109,8 +126,8 @@ class CreateGameFragment : Fragment() {
             }
             Competition.currentGame.startGame(
                 swappedService,
-                binding.rightPlayerOne.isChecked && !Competition.offlineMode,
-                binding.rightPlayerTwo.isChecked && !Competition.offlineMode
+                binding.rightPlayerOne.isChecked,
+                binding.rightPlayerTwo.isChecked
             )
             showControlPanel()
         }

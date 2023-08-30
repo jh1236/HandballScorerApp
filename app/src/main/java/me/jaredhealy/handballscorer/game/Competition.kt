@@ -11,7 +11,6 @@ import okhttp3.Request
 import okhttp3.Response
 import org.json.JSONObject
 import java.io.IOException
-import java.lang.Exception
 
 
 object Competition {
@@ -36,6 +35,16 @@ object Competition {
 
     val teams = arrayListOf<Team>()
     private val callback = arrayListOf<() -> Unit>()
+
+
+    fun resetOfflineGame() {
+        this.offlineGame = Game(
+            Team("Team One", "Player One", "Player Two"),
+            Team("Team Two", "Player One", "Player Two")
+        )
+    }
+
+    @Suppress("UNCHECKED_CAST")
     fun getTeamsFromApi() {
         val request = Request.Builder().url("http://handball-tourney.zapto.org/api/teams").build()
 
@@ -45,11 +54,20 @@ object Competition {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val string = response.body()?.string()
-                if (string != null) {
-                    processTeams(string)
-                    getCurrentGame()
+                val map = try {
+                    val string = response.body()?.string()!!
+                    JSONObject(string).toMap()
+                } catch (e: Exception) {
+
+                    return
                 }
+                teams.clear()
+                for ((teamName, v) in map) {
+                    teams.add(
+                        Team.fromMap(teamName, v as Map<String, *>)
+                    )
+                }
+                getCurrentGame()
             }
         })
     }
@@ -57,6 +75,7 @@ object Competition {
     fun addCallback(func: () -> Unit) {
         callback.add(func)
     }
+
 
     fun getCurrentGame(triesRemaining: Int = 20) {
         val request =
@@ -68,46 +87,25 @@ object Competition {
             }
 
             override fun onResponse(call: Call, response: Response) {
-                val string: String? = try {
-                    response.body()?.string()
+                val map = try {
+                    val string = response.body()?.string()!!
+                    JSONObject(string).toMap()
                 } catch (e: Exception) {
-                    null
-                }
-                if (string != null) {
-                    if (string != "none") {
-                        val map = JSONObject(string).toMap()
-                        Log.i("api", map.toString())
-                        onlineGame = Game.loadFromMap(map)
-                        for (i in callback) {
-                            val mainHandler = Handler(Looper.getMainLooper())
-                            mainHandler.post(i)
-                        }
+                    if (triesRemaining > 0) {
+                        getCurrentGame(triesRemaining - 1)
                     }
-                } else if (triesRemaining > 0) {
-                    getCurrentGame(triesRemaining - 1)
+                    return
                 }
+
+                Log.i("api", map.toString())
+                onlineGame = Game.loadFromMap(map)
+                for (i in callback) {
+                    val mainHandler = Handler(Looper.getMainLooper())
+                    mainHandler.post(i)
+                }
+
             }
         })
-    }
-
-
-    @Suppress("UNCHECKED_CAST")
-    private fun processTeams(string: String) {
-        Log.i("api", string)
-        val map = JSONObject(string).toMap()
-        teams.clear()
-        for ((teamName, v) in map) {
-            teams.add(
-                Team.fromMap(teamName, v as Map<String, *>)
-            )
-        }
-    }
-
-    fun resetOfflineGame() {
-        this.offlineGame = Game(
-            Team("Team One", "Player One", "Player Two"),
-            Team("Team Two", "Player One", "Player Two")
-        )
     }
 
 }

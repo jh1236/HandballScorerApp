@@ -16,11 +16,11 @@ import androidx.core.os.postDelayed
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.slider.RangeSlider
+import com.squareup.picasso.Picasso
 import me.jaredhealy.handballscorer.R
 import me.jaredhealy.handballscorer.databinding.FragmentDashboardBinding
 import me.jaredhealy.handballscorer.game.Competition
 import me.jaredhealy.handballscorer.game.Game
-import me.jaredhealy.handballscorer.game.ServerInteractions
 import me.jaredhealy.handballscorer.game.Team
 import kotlin.math.max
 
@@ -59,7 +59,7 @@ class DashboardFragment : Fragment() {
         }
 
     private fun exit() {
-        findNavController().navigate(R.id.navigation_create_game)
+        findNavController().navigate(R.id.navigation_end_game)
     }
 
     private fun whichPlayer(
@@ -98,9 +98,9 @@ class DashboardFragment : Fragment() {
     }
 
     private fun timeOut() {
-        var timeRemaining = 600
+        var timeRemaining = 300
         val textView = TextView(context)
-        textView.text = "Select an option"
+        textView.text = "30 seconds left"
         textView.setPadding(20, 30, 20, 30)
         textView.textSize = 20f
 
@@ -163,7 +163,8 @@ class DashboardFragment : Fragment() {
         binding.timeOutOneBtn.text = "Timeout $teamOne (${teamOne.timeOutsRemaining})"
         binding.timeOutTwoBtn.text = "Timeout $teamTwo (${teamTwo.timeOutsRemaining})"
         if (game.isOver()) {
-            binding.totalRounds.text = "${game.getWinningTeam()!!} Wins!"
+            exit()
+            return
         }
         if (teamOne.cardCount != 0) {
             binding.cardsTeamOne.visibility = View.VISIBLE
@@ -212,6 +213,14 @@ class DashboardFragment : Fragment() {
     ): View {
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         visualSwap = false
+        if (!Competition.offlineMode && Competition.onlineGame != null) {
+            Picasso.get()
+                .load("http://handball-tourney.zapto.org/api/teams/image?name=${teamOne.niceName}")
+                .into(binding.teamOneImg)
+            Picasso.get()
+                .load("http://handball-tourney.zapto.org/api/teams/image?name=${teamTwo.niceName}")
+                .into(binding.teamTwoImg)
+        }
         if (Competition.currentGame.state != Game.State.PLAYING) {
             Competition.getTeamsFromApi()
             exit()
@@ -226,16 +235,17 @@ class DashboardFragment : Fragment() {
         }
         binding.undoButton.setOnClickListener {
             val builder = AlertDialog.Builder(activity)
-            builder.setTitle("Are you sure you want to undo?").setPositiveButton("Yes") { dialog, _ ->
-                game.undo()
-                Competition.getTeamsFromApi()
-                val mainHandler = Handler(Looper.getMainLooper())
-                mainHandler.postDelayed(200) {
-                    updateDisplays()
-                }
-            }.setNegativeButton("No") { dialog, _ ->
-                dialog.dismiss()
-            }.show()
+            builder.setTitle("Are you sure you want to undo?")
+                .setPositiveButton("Yes") { dialog, _ ->
+                    game.undo()
+                    Competition.getTeamsFromApi()
+                    val mainHandler = Handler(Looper.getMainLooper())
+                    mainHandler.postDelayed(200) {
+                        updateDisplays()
+                    }
+                }.setNegativeButton("No") { dialog, _ ->
+                    dialog.dismiss()
+                }.show()
         }
         binding.scoreOneBtn.setOnClickListener {
             if (game.state == Game.State.PLAYING) {
@@ -286,120 +296,105 @@ class DashboardFragment : Fragment() {
 
         }
         binding.greenTwoBtn.setOnClickListener {
-            if (game.state == Game.State.PLAYING) {
-                whichPlayer("Which Player", teamTwo) {
-                    teamTwo.greenCard(it == 0)
-                    updateDisplays()
-                }
-            } else {
+            whichPlayer("Which Player", teamTwo) {
+                teamTwo.greenCard(it == 0)
+                updateDisplays()
+            }
+            if (game.state != Game.State.PLAYING) {
                 exit()
             }
 
         }
         binding.yellowOneBtn.setOnClickListener {
-            if (game.state == Game.State.PLAYING) {
-                whichPlayer("Which Player", teamOne) {
-                    teamOne.yellowCard(it == 0)
-                    updateDisplays()
-                }
-            } else {
+
+            whichPlayer("Which Player", teamOne) {
+                teamOne.yellowCard(it == 0)
+                updateDisplays()
+            }
+            if (game.state != Game.State.PLAYING) {
                 exit()
             }
         }
         binding.yellowTwoBtn.setOnClickListener {
-            if (game.state == Game.State.PLAYING) {
-                whichPlayer("Which Player", teamTwo) {
-                    teamTwo.yellowCard(it == 0)
-                    updateDisplays()
-                }
-            } else {
+            whichPlayer("Which Player", teamTwo) {
+                teamTwo.yellowCard(it == 0)
+                updateDisplays()
+            }
+            if (game.state != Game.State.PLAYING) {
                 exit()
             }
         }
         binding.yellowOneBtn.setOnLongClickListener {
-            if (game.state == Game.State.PLAYING) {
-                whichPlayer("Which Player", teamOne) {
-                    val builder = AlertDialog.Builder(activity)
-                    val input = RangeSlider(requireContext())
-                    input.stepSize = 1.0f
-                    input.setLabelFormatter { it.toInt().toString() }
-                    input.setValues(3.0f)
-                    input.valueFrom = 1.0f
-                    input.valueTo = 10.0f
-                    builder.setTitle("How many rounds").setPositiveButton("Done") { dialog, _ ->
-                        teamOne.yellowCard(it == 0, input.values[0].toInt())
-                        updateDisplays()
-                        dialog.dismiss()
-                    }.setNegativeButton("Cancel") { dialog, _ ->
-                        dialog.dismiss()
-                    }.setView(input)
-                    builder.create().show()
-                }
-            } else {
+            whichPlayer("Which Player", teamOne) {
+                val builder = AlertDialog.Builder(activity)
+                val input = RangeSlider(requireContext())
+                input.stepSize = 1.0f
+                input.setLabelFormatter { it.toInt().toString() }
+                input.setValues(3.0f)
+                input.valueFrom = 1.0f
+                input.valueTo = 10.0f
+                builder.setTitle("How many rounds").setPositiveButton("Done") { dialog, _ ->
+                    teamOne.yellowCard(it == 0, input.values[0].toInt())
+                    updateDisplays()
+                    dialog.dismiss()
+                }.setNegativeButton("Cancel") { dialog, _ ->
+                    dialog.dismiss()
+                }.setView(input)
+                builder.create().show()
+            }
+            if (game.state != Game.State.PLAYING) {
                 exit()
             }
             true
         }
         binding.yellowTwoBtn.setOnLongClickListener {
-            if (game.state == Game.State.PLAYING) {
-                whichPlayer("Which Player", teamTwo) {
-                    val builder = AlertDialog.Builder(activity)
-                    val input = RangeSlider(requireContext())
-                    input.stepSize = 1.0f
-                    input.setLabelFormatter { it.toInt().toString() }
-                    input.setValues(3.0f)
-                    input.valueFrom = 1.0f
-                    input.valueTo = 10.0f
-                    builder.setTitle("How many rounds").setPositiveButton("Done") { dialog, _ ->
-                        teamTwo.yellowCard(it == 0, input.values[0].toInt())
-                        updateDisplays()
-                        dialog.dismiss()
-                    }.setNegativeButton("Cancel") { dialog, _ ->
-                        dialog.dismiss()
-                    }.setView(input)
-                    builder.create().show()
-                }
-            } else {
+            whichPlayer("Which Player", teamTwo) {
+                val builder = AlertDialog.Builder(activity)
+                val input = RangeSlider(requireContext())
+                input.stepSize = 1.0f
+                input.setLabelFormatter { it.toInt().toString() }
+                input.setValues(3.0f)
+                input.valueFrom = 1.0f
+                input.valueTo = 10.0f
+                builder.setTitle("How many rounds").setPositiveButton("Done") { dialog, _ ->
+                    teamTwo.yellowCard(it == 0, input.values[0].toInt())
+                    updateDisplays()
+                    dialog.dismiss()
+                }.setNegativeButton("Cancel") { dialog, _ ->
+                    dialog.dismiss()
+                }.setView(input)
+                builder.create().show()
+            }
+            if (game.state != Game.State.PLAYING) {
                 exit()
             }
             true
         }
         binding.redOneBtn.setOnClickListener {
-            if (game.state == Game.State.PLAYING) {
-                whichPlayer("Which Player", teamOne) {
-                    teamOne.redCard(it == 0)
-                    updateDisplays()
-                }
-
-            } else {
+            whichPlayer("Which Player", teamOne) {
+                teamOne.redCard(it == 0)
+                updateDisplays()
+            }
+            if (game.state != Game.State.PLAYING) {
                 exit()
             }
         }
         binding.redTwoBtn.setOnClickListener {
-            if (game.state == Game.State.PLAYING) {
-                whichPlayer("Which Player", teamTwo) {
-                    teamTwo.redCard(it == 0)
-                    updateDisplays()
-                }
-            } else {
+            whichPlayer("Which Player", teamTwo) {
+                teamTwo.redCard(it == 0)
+                updateDisplays()
+            }
+            if (game.state != Game.State.PLAYING) {
                 exit()
             }
         }
         binding.timeOutOneBtn.setOnClickListener {
-            if (game.state == Game.State.PLAYING && teamOne.allowedTimeout()) {
-                teamOne.callTimeout()
-                timeOut()
-            } else {
-                exit()
-            }
+            teamOne.callTimeout()
+            timeOut()
         }
         binding.timeOutTwoBtn.setOnClickListener {
-            if (game.state == Game.State.PLAYING && teamTwo.allowedTimeout()) {
-                teamTwo.callTimeout()
-                timeOut()
-            } else {
-                exit()
-            }
+            teamTwo.callTimeout()
+            timeOut()
         }
         binding.timeOutOneBtn.setOnLongClickListener {
             teamOne.callTimeout()

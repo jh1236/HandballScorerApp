@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import com.squareup.picasso.Picasso
 import me.jaredhealy.handballscorer.R
 import me.jaredhealy.handballscorer.databinding.FragmentHomeBinding
 import me.jaredhealy.handballscorer.game.Competition
@@ -106,6 +107,21 @@ class HomeFragment : Fragment() {
             binding.serverOneScoreboard.visibility = View.INVISIBLE
             binding.serverTwoScoreboard.visibility = View.VISIBLE
             binding.serverTwoScoreboard.text = serverName
+        }
+        if (Competition.onlineGame != null && !Competition.offlineMode) {
+            binding.teamOneImgDisplay.visibility = View.VISIBLE
+            binding.teamTwoImgDisplay.visibility = View.VISIBLE
+            Picasso.get()
+                .load("http://handball-tourney.zapto.org/api/teams/image?name=${Competition.currentGame.teamOne.niceName}")
+                .into(binding.teamOneImgDisplay)
+            Picasso.get()
+                .load("http://handball-tourney.zapto.org/api/teams/image?name=${Competition.currentGame.teamTwo.niceName}")
+                .into(binding.teamTwoImgDisplay)
+
+
+        } else {
+            binding.teamOneImgDisplay.visibility = View.INVISIBLE
+            binding.teamTwoImgDisplay.visibility = View.INVISIBLE
         }
         for ((i, j) in lastActions zip actionTexts) {
             j.text = i

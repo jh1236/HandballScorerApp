@@ -111,4 +111,11 @@ object ServerInteractions {
             mapOf()
         )
     }
+
+    fun end(player: Player) {
+        post(
+            "games/update/end",
+            mapOf("bestPlayer" to player.name)
+        )
+    }
 }
